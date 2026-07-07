@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@theme {
+  /* Typography */
+  --font-display: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  --font-body: var(--font-inter), "Inter", sans-serif;
+  --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  
+  /* Neutrals — sampled from allium.so (true black text, white bg, warm gray) */
+  --color-ink-950: #0a0a0a;
+  --color-ink-800: #1a1a1a;
+  --color-ink-600: #4a4a4a;
+  --color-ink-400: #6b6b6b;
+  --color-ink-200: #e4e4e1;
+  --color-ink-100: #f1f0ed;
+  --color-paper: #ffffff;
+
+  /* Accent — Segreto's own, distinct from Allium's pink */
+  --color-signal-300: #8fe0cf;
+  --color-signal-400: #4fcbb0;
+  --color-signal-500: #2fae92;
+  --color-signal-600: #218a74;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink-950);
+  font-family: var(--font-body);
+}
+
+@layer utilities {
+  /* faint dot/line grid for the reserved illustration panel */
+  .grid-pattern {
+    background-image: linear-gradient(
+        to right,
+        var(--color-ink-700) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, var(--color-ink-700) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%);
+  }
+
+  /* vertical tick-mark rail, left page edge — precision/ledger motif */
+  .ruler-edge {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      var(--color-ink-600) 0px,
+      var(--color-ink-600) 1px,
+      transparent 1px,
+      transparent 24px
+    );
+    background-position: 35px 0;
+    background-repeat: repeat-y;
+    background-size: 1px 24px;
+  }
+
+  .text-gradient-signal {
+    background-image: linear-gradient(
+      90deg,
+      var(--color-signal-400),
+      var(--color-foil-400)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
