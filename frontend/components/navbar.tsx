@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { Logo } from "./logo";
 
 const NAV_LINKS = [
   { label: "Marketplace", href: "#marketplace" },
@@ -17,14 +18,8 @@ export function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50   border-b border-neutral-200 bg-white backdrop-blur-md">
       <nav className="mx-auto flex h-18 max-w-350 items-center justify-between px-6 lg:px-10">
-        <Link href="/" className="flex items-center gap-2.5">
-          <span className="relative flex size-8 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50">
-            <span className="font-display text-sm font-semibold text-black">S</span>
-            <span className="absolute -right-1 -top-1 size-2 rounded-full bg-pink-400" />
-          </span>
-          <span className="font-display text-lg font-semibold tracking-tight text-black">
-            Segreto
-          </span>
+        <Link href="/" className="flex items-center">
+          <Logo width={140} color="#000" />
         </Link>
 
         <div className="hidden items-center gap-1 lg:flex">

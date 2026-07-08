@@ -71,3 +71,39 @@ body {
     color: transparent;
   }
 }
+.sample-color{
+  background-color: #e4dae2;
+}
+.sample-color-2{
+  background-color: #f1cdea;
+}
+.sample-color-3{
+  color: #fa93e5;
+}
+.sample-color-4{
+  background-color: #f9f3ea;
+}
+.sample-color-5{
+ border-color: #f1cdea;
+}
+@layer utilities {
+  .bg-pink-glow {
+    background-image: linear-gradient(
+     to top right,
+     rgba(234, 173, 207, 0.55),
+     transparent 65%
+    );
+    
+  }
+  
+}
+
+/* Hide scrollbar but keep scrolling */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

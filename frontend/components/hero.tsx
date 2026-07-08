@@ -49,7 +49,7 @@ export function Hero() {
         .from(".hero-cta", { y: 14, opacity: 0, duration: 0.6, stagger: 0.08 }, "-=0.45")
         .from(".hero-stat", { y: 12, opacity: 0, duration: 0.5, stagger: 0.08 }, "-=0.4")
         .from(".hero-panel", { opacity: 0, scale: 0.97, duration: 0.9, ease: "power2.out" }, "-=0.9")
-       
+
     },
     { scope: containerRef }
   );
@@ -59,12 +59,12 @@ export function Hero() {
       ref={containerRef}
       className=" relative  overflow-hidden border-y border-dashed border-neutral-300 bg-white "
     >
-      <TickStrip align="left" />
-      <TickStrip align="right" />
+      <TickStrip align="left" cells={300} cellSize={5} />
+      <TickStrip align="right" cells={300} cellSize={5} />
 
       <div className="mx-auto grid max-w-350 grid-cols-1 lg:grid-cols-2 lg:px-12">
         {/* Left — reserved for illustration, built separately */}
-        <div className="hero-panel relative isolate order-2 min-h-105 overflow-hidden border-t border-dashed border-neutral-300 bg-white lg:order-1 lg:min-h-140 lg:border-t-0 lg:border-r lg:border-dashed lg:border-neutral-300">
+        <div className="hero-panel bg-pink-glow  relative isolate order-2 min-h-105 overflow-hidden border-t border-dashed border-neutral-300 bg-white lg:order-1 lg:min-h-140 lg:border-t-0 lg:border-r lg:border-dashed lg:border-neutral-300">
           <div className="absolute inset-6 border border-dashed border-neutral-200" />
           <div className="absolute inset-x-10 top-1/2 h-px bg-neutral-200" />
           <div className="absolute inset-y-10 left-1/2 w-px bg-neutral-200" />
@@ -100,7 +100,7 @@ export function Hero() {
           </h1>
 
           <p className="hero-sub mt-6 max-w-md text-lg leading-relaxed text-neutral-400">
-            Segreto is the privacy-first marketplace for digital trading cards.
+            Nascosto is the privacy-first marketplace for digital trading cards.
             List openly, negotiate through encrypted offers, and settle on-chain
             without exposing your price, your position, or your next move.
           </p>
