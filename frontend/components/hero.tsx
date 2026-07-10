@@ -7,7 +7,9 @@ import { ArrowRight } from "lucide-react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { TickStrip } from "./tick-strip";
-import { ArcaneCardArt, DroneCardArt, MorokhCardArt } from "./card-art";
+// Replace these with your actual 5 card-art export names from "./card-art"
+import { Card1Art, Card2Art, Card3Art, Card4Art, Card5Art,Card6Art } from "./card-art";
+import { ButtonLink } from "./link";
 
 type HeroCard = {
   Art: ComponentType<{ className?: string; title: string }>;
@@ -17,22 +19,40 @@ type HeroCard = {
 
 const HERO_CARDS: HeroCard[] = [
   {
-    Art: MorokhCardArt,
-    title: "Morokh card artwork",
+    Art: Card1Art,
+    title: "Card artwork 1",
     className:
-      "left-[7%] top-[11%] z-20 w-[58%] rotate-[-10deg] aspect-[706/310]",
+      "left-[15%] top-[6%] z-10 w-[27%] rotate-[-8deg] aspect-[5/7] shadow-[0_20px_45px_-15px_rgba(244,114,182,0.35)]",
   },
   {
-    Art: DroneCardArt,
-    title: "Drone card artwork",
+    Art: Card2Art,
+    title: "Card artwork 2",
     className:
-      "right-[7%] top-[19%] z-30 w-[46%] rotate-[8deg] aspect-[600/620]",
+      "left-[36%] top-[2%] z-30 w-[28%]  aspect-[5/7] shadow-[0_25px_55px_-15px_rgba(244,114,182,0.5)]",
   },
   {
-    Art: ArcaneCardArt,
-    title: "Arcane card artwork",
+    Art: Card3Art,
+    title: "Card artwork 3",
     className:
-      "bottom-[9%] left-[25%] z-10 w-[43%] rotate-[4deg] aspect-[402/600]",
+      "right-[15%] top-[6%] z-10 w-[27%] rotate-[9deg] aspect-[5/7] shadow-[0_20px_45px_-15px_rgba(244,114,182,0.35)]",
+  },
+  {
+    Art: Card4Art,
+    title: "Card artwork 4",
+    className:
+      "left-[18%] bottom-[4%] z-20 w-[27%] rotate-[-9deg] aspect-[5/7] shadow-[0_20px_45px_-15px_rgba(236,72,153,0.3)]",
+  },
+  {
+    Art: Card5Art,
+    title: "Card artwork 5",
+    className:
+      "left-[58%] bottom-[4%] z-20 w-[27%] rotate-[9deg] aspect-[5/7] shadow-[0_20px_45px_-15px_rgba(236,72,153,0.3)]",
+  },
+  {
+    Art: Card6Art,
+    title: "Card artwork 6",
+    className:
+      "right-[36%] bottom-[7%] z-20 w-[27%]  aspect-[5/7] shadow-[0_20px_45px_-15px_rgba(236,72,153,0.3)]",
   },
 ];
 
@@ -59,8 +79,8 @@ export function Hero() {
       ref={containerRef}
       className=" relative  overflow-hidden border-y border-dashed border-neutral-300 bg-white "
     >
-      <TickStrip align="left" cells={300} cellSize={5} />
-      <TickStrip align="right" cells={300} cellSize={5} />
+      <TickStrip align="left" className="sample-color-4" cells={300} cellSize={5} />
+      <TickStrip className="sample-color-4" align="right" cells={300} cellSize={5} />
 
       <div className="mx-auto grid max-w-350 grid-cols-1 lg:grid-cols-2 lg:px-12">
         {/* Left — reserved for illustration, built separately */}
@@ -72,7 +92,7 @@ export function Hero() {
           {HERO_CARDS.map(({ Art, className, title }) => (
             <div
               key={title}
-              className={`hero-card group absolute overflow-hidden rounded-xl border border-neutral-200/80 bg-neutral-950 shadow-[0_25px_60px_-12px_rgba(10,10,10,0.25)] transition-all duration-500 hover:z-50 hover:scale-105 hover:shadow-[0_35px_80px_-15px_rgba(244,114,182,0.35)] hover:border-pink-300/60 hover:-translate-y-2 ${className}`}
+              className={`hero-card absolute overflow-hidden rounded-xl border border-neutral-200/80 bg-neutral-950 ${className}`}
             >
               <Art title={title} className="h-full w-full" />
             </div>
@@ -81,20 +101,13 @@ export function Hero() {
 
         {/* Right — content, full black panel */}
         <div className="order-1 flex flex-col justify-center bg-black px-6 py-16 text-white sm:px-10 lg:order-2 lg:px-16">
-          <div className="hero-chip mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5">
-            <span className="size-1.5 rounded-full bg-pink-300" />
-            <span className="font-mono text-xs uppercase tracking-wide text-neutral-300">
-              Confidential marketplace · Avalanche
-            </span>
-          </div>
-
           <h1 className="font-display text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
             <span className="block overflow-hidden">
               <span className="hero-line block">Trade rare cards.</span>
             </span>
             <span className="block overflow-hidden">
-              <span className="hero-line block text-neutral-400">
-                Keep your position <span className="text-pink-300">sealed.</span>
+              <span className="hero-line block text-white">
+                Keep your position <span className="text-white">sealed.</span>
               </span>
             </span>
           </h1>
@@ -106,19 +119,7 @@ export function Hero() {
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-3">
-            <Link
-              href="#marketplace"
-              className="hero-cta group inline-flex items-center gap-2 rounded-full bg-pink-200 px-6 py-3.5 text-sm font-semibold text-black transition-colors hover:bg-pink-300"
-            >
-              Enter the marketplace
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
-            </Link>
-            <Link
-              href="#how-it-works"
-              className="hero-cta inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
-            >
-              See how it works
-            </Link>
+            <ButtonLink className="text-black text-xl" href="#market">Enter the MarketPlace</ButtonLink>
           </div>
         </div>
       </div>

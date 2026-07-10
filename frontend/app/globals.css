@@ -2,8 +2,8 @@
 
 @theme {
   /* Typography */
-  --font-display: var(--font-space-grotesk), "Space Grotesk", sans-serif;
-  --font-body: var(--font-inter), "Inter", sans-serif;
+  --font-display: var(--font-rajdhani), "Rajdhani", sans-serif;
+  --font-body: var(--font-rajdhani), "Rajdhani", sans-serif;
   --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
   
   /* Neutrals — sampled from allium.so (true black text, white bg, warm gray) */
@@ -82,6 +82,9 @@ body {
 }
 .sample-color-4{
   background-color: #f9f3ea;
+}
+.hover-color{
+  background-color: #a99b89;
 }
 .sample-color-5{
  border-color: #f1cdea;

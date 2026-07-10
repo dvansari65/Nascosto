@@ -1,0 +1,26 @@
+{
+  "name": "nascosto-contracts",
+  "version": "1.0.0",
+  "description": "Nascosto — confidential trading card marketplace smart contracts on Avalanche",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:fuji": "hardhat run scripts/deploy.ts --network fuji",
+    "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
+    "verify": "hardhat verify --network fuji",
+    "clean": "hardhat clean",
+    "typechain": "hardhat typechain"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.0",
+    "@types/node": "^20.0.0",
+    "hardhat": "^2.22.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0",
+    "dotenv": "^16.4.0"
+  }
+}

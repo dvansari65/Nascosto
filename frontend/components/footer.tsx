@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { TickStrip } from "./tick-strip";
 import Logo from "./logo";
+import { Button } from "./button";
 
 const FOOTER_LINKS = {
   Marketplace: [
@@ -49,7 +50,7 @@ const SOCIAL_LINKS = [
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-dashed border-neutral-300 bg-white px-6 py-16 lg:px-20">
+    <footer className="relative border-t border-dashed border-neutral-300 bg-pink-100 px-6 py-16 lg:px-20">
       <TickStrip className="sample-color-4 text-gray-300" align="left" cells={400} cellSize={6} width={120} />
       <TickStrip className="sample-color-4 text-gray-300"  align="right" cells={400} cellSize={6} width={120} />
 
@@ -62,14 +63,11 @@ export function Footer() {
               <input
                 type="email"
                 placeholder="Work email"
-                className="w-full rounded-full border border-neutral-300 bg-white px-4 py-2.5 text-sm text-black placeholder:text-neutral-400 focus:border-neutral-400 focus:outline-none"
+                className="w-full rounded-[5px] border border-neutral-300 bg-white px-4 py-2.5 text-sm text-black placeholder:text-neutral-400 focus:border-neutral-400 focus:outline-none"
               />
-              <button
-                type="submit"
-                className="shrink-0 rounded-full bg-pink-200 px-5 py-2.5 text-sm font-semibold text-black hover:bg-pink-300"
-              >
-                Subscribe
-              </button>
+             <div className="ml-2">
+             <Button className="py-[9px] ">Subscribe</Button>
+             </div>
             </form>
             <p className="mt-3 text-xs text-neutral-500">
               Stay updated with the latest from Nascosto.
@@ -86,7 +84,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-sm text-neutral-500 hover:text-black"
+                      className="text-sm text-neutral-800 hover:text-black"
                     >
                       {link.label}
                     </Link>

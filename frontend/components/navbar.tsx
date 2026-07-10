@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Logo } from "./logo";
+import { ButtonLink } from "./link";
 
 const NAV_LINKS = [
   { label: "Marketplace", href: "#marketplace" },
@@ -35,18 +36,20 @@ export function Navbar() {
         </div>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Link
-            href="#"
-            className="text-sm font-medium text-neutral-600 underline decoration-neutral-300 underline-offset-4 transition-colors hover:text-black"
+          <ButtonLink
+            href="#login"
+            className="w-full justify-center border border-dashed text-xl "
+            shadowColor="#a99b89"
           >
-            Log in
-          </Link>
-          <Link
-            href="#"
-            className="inline-flex items-center gap-1.5 rounded-full bg-black px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-neutral-800"
+            Login
+          </ButtonLink>
+          <ButtonLink
+            href="#launch"
+            className="w-full justify-center border border-dashed text-xl "
+            shadowColor="#a99b89"
           >
-            Launch app
-          </Link>
+            Launch
+          </ButtonLink>
         </div>
 
         <button
@@ -71,20 +74,6 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <div className="mt-3 flex flex-col gap-2 border-t border-neutral-200 pt-3">
-              <Link
-                href="#"
-                className="rounded-full px-4 py-2.5 text-center text-sm font-medium text-neutral-600"
-              >
-                Log in
-              </Link>
-              <Link
-                href="#"
-                className="rounded-full bg-black px-4 py-2.5 text-center text-sm font-semibold text-white"
-              >
-                Launch app
-              </Link>
-            </div>
           </div>
         </div>
       )}

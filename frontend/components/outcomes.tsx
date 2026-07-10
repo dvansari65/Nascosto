@@ -66,15 +66,15 @@ export function Outcomes() {
       <div className="mx-auto max-w-350">
         <div className="mx-auto mb-14 max-w-xl text-center">
           <span className="outcome-eyebrow font-mono text-xs uppercase tracking-wide text-neutral-500">
-            Why Segreto
+            Why Nascosto
           </span>
           <h2 className="outcome-heading mt-3 font-display text-3xl font-semibold tracking-tight text-black sm:text-4xl">
             Built for traders who don&apos;t want to be seen
           </h2>
         </div>
 
-        <div className="outcome-grid relative border border-neutral-200 pt-12">
-          <TickStrip align="top" className="w-full text-gray-300" cells={120} cellSize={8} width={48} />
+        <div className="outcome-grid relative border border-t-transparent  border-neutral-200 pt-12">
+          <TickStrip align="top" className="w-full text-gray-300" cells={150} cellSize={6} width={48} />
 
           <dl className="grid grid-cols-1 divide-y divide-neutral-200 border-t border-neutral-200 lg:grid-cols-3 lg:divide-x lg:divide-y-0">
             {OUTCOMES.map((item) => (
