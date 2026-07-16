@@ -1,4 +1,5 @@
-import { toPreviewSrc } from "@/utils/preview";
+import { toPreviewSrc } from "./preview";
+
 
 export type CardMetadata = {
   name: string;
