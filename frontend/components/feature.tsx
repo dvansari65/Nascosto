@@ -38,7 +38,7 @@ export function Features() {
       <div className="mx-auto max-w-350">
         <div className="mx-auto mb-14 max-w-2xl text-center">
           <h2 className="font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-            Segreto keeps <span className="text-pink-300">what&apos;s private, private.</span>
+            Nascosto keeps <span className="text-pink-300">what&apos;s private, private.</span>
           </h2>
           <p className="mt-4 text-base leading-relaxed text-neutral-400">
             Every listing is public. Every negotiation is not. Here&apos;s what

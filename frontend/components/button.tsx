@@ -126,7 +126,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           onFocus={activate}
           onBlur={deactivate}
           style={sizeStyle}
-          className={`relative rounded-[4px] border border-dashed border-[rgb(215,214,179)] bg-[#f9f3ea] px-3 py-2 text-sm ${
+          className={`relative rounded-sm border border-dashed border-[rgb(215,214,179)] bg-[#f9f3ea] px-3 py-2 text-sm ${
             disabled ? "cursor-not-allowed opacity-50" : ""
           } ${className}`}
           {...props}

@@ -44,8 +44,8 @@ function TwitterIcon({ className }: { className?: string }) {
 }
 
 const SOCIAL_LINKS = [
-  { label: "Segreto on Twitter", href: "#", Icon: TwitterIcon },
-  { label: "Segreto on LinkedIn", href: "#", Icon: LinkedInIcon },
+  { label: "Nascosto on Twitter", href: "https://x.com/danisshhh_h", Icon: TwitterIcon },
+  { label: "Nascosto on LinkedIn", href: "https://www.linkedin.com/in/danish-ansari-347a06299/", Icon: LinkedInIcon },
 ];
 
 export function Footer() {
