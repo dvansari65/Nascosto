@@ -62,13 +62,6 @@ export function CardArtwork({
                 style={{ mixBlendMode: "overlay" }}
             />
 
-            <div
-                className={`absolute left-2.5 top-2.5 flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium ring-1 ${rarity.badge}`}
-            >
-                <span className={`h-1.5 w-1.5 rounded-full ${rarity.dot}`} />
-                {rarity.label}
-            </div>
-
             <button
                 onClick={onDetailsClick}
                 className="absolute right-2.5 top-2.5 flex size-7 items-center justify-center rounded-full bg-black/30 text-white opacity-0 backdrop-blur-sm transition-opacity duration-200 hover:bg-black/50 group-hover:opacity-100"
