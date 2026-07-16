@@ -2,20 +2,9 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-/**
- * @title IEncryptedERC20
- * @dev Minimal interface for AvaCloud's eERC standard to perform confidential transfers.
- */
 interface IEncryptedERC20 {
-    /**
-     * @notice Transfers an encrypted amount of tokens from one address to another.
-     * @param from The address to transfer from.
-     * @param to The address to transfer to.
-     * @param encryptedAmountHandle Pointer to the encrypted amount in eERC storage.
-     * @param proof The zk-SNARK (Groth16) proof validating the transfer.
-     * @return bool True if the transfer succeeds.
-     */
     function confidentialTransferFrom(
         address from,
         address to,
@@ -24,18 +13,13 @@ interface IEncryptedERC20 {
     ) external returns (bool);
 }
 
-/**
- * @title ConfidentialSettlement
- * @notice Facilitates the atomic settlement of a digital trading card (NFT) 
- * against a confidential payment using AvaCloud's eERC standard.
- */
-contract ConfidentialSettlement {
-    // Custom errors for gas efficiency and clean revert messages
+contract ConfidentialSettlement is Ownable {
     error ConfidentialPaymentFailed();
+    error Unauthorized();
+    error MarketplaceAlreadySet();
 
-    /**
-     * @notice Emitted when a confidential trade is successfully settled.
-     */
+    address public marketplace;
+
     event TradeSettled(
         address indexed nftContract,
         uint256 indexed tokenId,
@@ -43,11 +27,20 @@ contract ConfidentialSettlement {
         address seller
     );
 
-    /**
-     * @notice Atomically settles a trade: transfers the NFT and processes the confidential payment.
-     * @dev The buyer must have generated a valid zk-SNARK proof client-side for the `encryptedAmountHandle` 
-     * and granted the necessary allowances.
-     */
+    constructor() Ownable(msg.sender) {}
+
+    /// @notice One-time setup: links this contract to its Marketplace.
+    /// Must be called once, right after both contracts are deployed.
+    function setMarketplace(address _marketplace) external onlyOwner {
+        if (marketplace != address(0)) revert MarketplaceAlreadySet();
+        marketplace = _marketplace;
+    }
+
+    modifier onlyMarketplace() {
+        if (msg.sender != marketplace) revert Unauthorized();
+        _;
+    }
+
     function executeSettlement(
         address nftContract,
         uint256 tokenId,
@@ -56,8 +49,7 @@ contract ConfidentialSettlement {
         address seller,
         bytes32 encryptedAmountHandle,
         bytes calldata proof
-    ) external {
-        // 1. Process the confidential payment from buyer to seller via eERC
+    ) external onlyMarketplace {
         bool paymentSuccess = IEncryptedERC20(paymentToken).confidentialTransferFrom(
             buyer,
             seller,
@@ -69,10 +61,8 @@ contract ConfidentialSettlement {
             revert ConfidentialPaymentFailed();
         }
 
-        // 2. Transfer the NFT from the seller to the buyer
         IERC721(nftContract).transferFrom(seller, buyer, tokenId);
 
-        // 3. Emit settlement event
         emit TradeSettled(nftContract, tokenId, buyer, seller);
     }
 }

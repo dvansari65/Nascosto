@@ -122,3 +122,4 @@ contract ShadowCardsMarketplace {
         emit OfferAccepted(nftContract, tokenId, buyer);
     }
 }
+
