@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { ethers } from "ethers";
 import { ShadowCardService } from "@/services/shadowcard.service";
 import { MarketplaceService } from "@/services/marketplace.service";
@@ -8,38 +8,34 @@ type ListDeps = {
   address: string | null | undefined;
 };
 
-export function useListCard({ getEthersSigner, address }: ListDeps) {
-  const [status, setStatus] = useState("");
-  const [isListing, setIsListing] = useState(false);
+type ListArgs = {
+  tokenId: string | null;
+  price: string;
+};
 
-  const listCard = async (tokenId: string | null): Promise<boolean> => {
-    if (!address || !tokenId) return false;
-    try {
-      setIsListing(true);
-      setStatus("Listing...");
-      const signer = await getEthersSigner();
-      if (!signer) {
-        setStatus("Wallet signer unavailable.");
-        return false;
+export function useListCard({ getEthersSigner, address }: ListDeps) {
+  return useMutation({
+    mutationFn: async ({ tokenId, price }: ListArgs) => {
+      if (!address) {
+        throw new Error("Wallet not connected.");
+      }
+      if (!tokenId || !price || Number(price) <= 0) {
+        throw new Error("Invalid Token ID or Price.");
       }
 
+      const signer = await getEthersSigner();
+      if (!signer) {
+        throw new Error("Wallet signer unavailable.");
+      }
+
+      // Approve the Marketplace to handle the specific Token ID
       await ShadowCardService.approveSettlement(signer, tokenId);
 
-      // TODO: replace with a real eERC-encrypted amount once the SDK is wired in.
-      // Plaintext placeholder for the demo only — see earlier note on this gap.
-      const amountInWei = ethers.parseEther("10");
+      // Convert the plaintext string to Wei, then list and encrypt
+      const amountInWei = ethers.parseEther(price);
       await MarketplaceService.listCard(signer, tokenId, amountInWei);
 
-      setStatus("Card listed securely!");
       return true;
-    } catch (e) {
-      console.error(e);
-      setStatus("Listing failed.");
-      return false;
-    } finally {
-      setIsListing(false);
-    }
-  };
-
-  return { status, isListing, listCard };
+    },
+  });
 }

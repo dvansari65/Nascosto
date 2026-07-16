@@ -25,11 +25,12 @@ async function fetchMyCards(
 
   const filter = contract.filters.CardMinted(null, address);
   const events = await getLogsInChunks(contract, filter, DEPLOYMENT_BLOCK, provider);
-
-  return events.map((e: any) => ({
+  const data = events.map((e: any) => ({
     tokenId: e.args.tokenId as bigint,
     contentHash: e.args.contentHash as string,
   }));
+  console.log("my cards:",data)
+  return data 
 }
 
 export function useMyCards(

@@ -5,7 +5,7 @@ import { uploadFileToIPFS, unpinFromIPFS, extractCidFromUri } from "@/pinata/upl
 import { ShadowCardService } from "@/services/shadowcard.service";
 import type { CardForm } from "@/types/card";
 import { buildCardMetadata } from "@/helpers/buildCardMetaData";
-
+import {BN} from "bn.js"
 type MintDeps = {
   getEthersSigner: () => Promise<ethers.Signer | null>;
   address: string | null | undefined;
@@ -14,6 +14,7 @@ type MintDeps = {
 type MintResult = {
   success: boolean;
   imageRolledBack: boolean;
+  tokenId:bigint | null
 };
 
 export function useMintCard({ getEthersSigner, address }: MintDeps) {
@@ -22,11 +23,11 @@ export function useMintCard({ getEthersSigner, address }: MintDeps) {
     mutationFn: async (cardForm: CardForm): Promise<MintResult> => {
       if (!address) {
         toast.error("Connect your wallet first.");
-        return { success: false, imageRolledBack: false };
+        return { success: false, imageRolledBack: false ,tokenId:null};
       }
       if (!cardForm.title.trim() || !cardForm.description.trim() || !cardForm.imageUri.trim()) {
         toast.error("Name, description, and an uploaded image are required.");
-        return { success: false, imageRolledBack: false };
+        return { success: false, imageRolledBack: false , tokenId:null};
       }
 
       let metadataCid: string | null = null;
@@ -36,7 +37,7 @@ export function useMintCard({ getEthersSigner, address }: MintDeps) {
         const signer = await getEthersSigner();
         if (!signer) {
           toast.error("Wallet signer unavailable. Try reconnecting.", { id: toastId });
-          return { success: false, imageRolledBack: false };
+          return { success: false, imageRolledBack: false,tokenId:null };
         }
 
         const metadata = buildCardMetadata(cardForm);
@@ -47,16 +48,17 @@ export function useMintCard({ getEthersSigner, address }: MintDeps) {
           { type: "application/json" }
         );
 
-        toast.loading("Uploading metadata to Pinata...", { id: toastId });
         const metadataUpload = await uploadFileToIPFS(metadataFile);
         metadataCid = metadataUpload.cid;
         const hash = ethers.keccak256(ethers.toUtf8Bytes(metadataJson));
 
-        toast.loading("Confirm the mint in your wallet...", { id: toastId });
         const tokenId = await ShadowCardService.mintCard(signer, address, metadataUpload.ipfsUri, hash);
-        console.log("token id:",tokenId)
-        toast.success("Card minted successfully!", { id: toastId });
-        return { success: true, imageRolledBack: false };
+        
+        if(!tokenId){
+          throw new Error("Token= id not found!")
+        }
+       
+        return { success: true, imageRolledBack: false, tokenId };
       } catch (e: any) {
         console.error("Mint failed:", e);
 
@@ -74,7 +76,7 @@ export function useMintCard({ getEthersSigner, address }: MintDeps) {
             : e?.message || "Mint failed. Please try again.";
         toast.error(message, { id: toastId });
 
-        return { success: false, imageRolledBack: Boolean(imageCid) };
+        return { success: false, imageRolledBack: Boolean(imageCid) , tokenId:null};
       }
     },
   });

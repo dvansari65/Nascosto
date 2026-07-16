@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import type { Listing } from "@/services/marketplace.service";
 import { ShadowCardService } from "@/services/shadowcard.service";
 import { CardMetadata, fetchCardMetadata } from "@/helpers/cardMetaData";
+import { getPublicProvider } from "@/lib/contracts";
 
 export type ListingWithMetadata = {
   listing: Listing;
@@ -12,14 +13,16 @@ export type ListingWithMetadata = {
 };
 
 export function useListingsWithMetadata(
-  listings: Listing[],
-  providerOrSigner: ethers.Signer | ethers.Provider | null
+  listings: Listing[]
 ) {
   const [items, setItems] = useState<ListingWithMetadata[]>([]);
 
+  // Stable string to prevent infinite loops if the parent passes new array references (like listings || [])
+  const listingsKey = listings.map(l => l.tokenId.toString()).join(",");
+
   useEffect(() => {
-    if (!providerOrSigner || listings.length === 0) {
-      setItems([]);
+    if (listings.length === 0) {
+      setItems((prev) => prev.length === 0 ? prev : []);
       return;
     }
 
@@ -38,7 +41,8 @@ export function useListingsWithMetadata(
 
     listings.forEach(async (listing, index) => {
       try {
-        const tokenUri = await ShadowCardService.getTokenURI(providerOrSigner, listing.tokenId);
+        const provider = getPublicProvider();
+        const tokenUri = await ShadowCardService.getTokenURI(provider, listing.tokenId);
         const metadata = await fetchCardMetadata(tokenUri);
         if (cancelled) return;
         setItems((current) => {
@@ -67,7 +71,8 @@ export function useListingsWithMetadata(
     return () => {
       cancelled = true;
     };
-  }, [listings, providerOrSigner]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listingsKey]);
 
   return items;
 }
