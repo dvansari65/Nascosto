@@ -2,19 +2,44 @@ import { ethers } from "ethers";
 import { getShadowCardContract, CONTRACT_ADDRESSES } from "@/lib/contracts";
 
 export class ShadowCardService {
-  static async mintCard(signer: ethers.Signer, address: string, uri: string, contentHash: string) {
-    if(!address){
-      console.log("address not found!!")
-      return
+  static async mintCard(
+    signer: ethers.Signer,
+    address: string,
+    uri: string,
+    contentHash: string
+  ): Promise<bigint | null> {
+
+    if (!address) {
+      throw new Error("Recipient address is required");
     }
-    console.log("address:",address)
+
     const contract = getShadowCardContract(signer);
-    if(!contract){
-      return;
+    if (!contract) {
+      throw new Error("ShadowCard contract not configured");
     }
-    console.log("card contract:")
+
     const tx = await contract.mintCard(address, uri, contentHash);
-    return tx.wait();
+    const receipt = await tx.wait(); // was missing await — receipt was a Promise, not real data
+
+    if (!receipt || receipt.status !== 1) {
+      throw new Error("Mint transaction failed or was reverted");
+    }
+
+    const mintedLog = receipt.logs
+      .map((log: any) => {
+        try {
+          return contract.interface.parseLog(log);
+        } catch {
+          return null;
+        }
+      })
+      .find((parsed: any) => parsed?.name === "CardMinted");
+
+    if (!mintedLog) {
+      console.log("minted log not found!")
+      return null
+    }
+    return mintedLog.args.tokenId as bigint;
   }
 
   /**
@@ -25,7 +50,7 @@ export class ShadowCardService {
    */
   static async approveSettlement(signer: ethers.Signer, tokenId: string | bigint) {
     const contract = getShadowCardContract(signer);
-    if(!contract){
+    if (!contract) {
       return;
     }
     const tx = await contract.approve(CONTRACT_ADDRESSES.SETTLEMENT, tokenId);
@@ -37,7 +62,7 @@ export class ShadowCardService {
     tokenId: string | bigint
   ) {
     const contract = getShadowCardContract(providerOrSigner);
-    if(!contract){
+    if (!contract) {
       return
     }
     return contract.tokenURI(tokenId);

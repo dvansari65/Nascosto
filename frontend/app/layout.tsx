@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Rajdhani, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/navbar";
-
+import { WalletProvider } from "@/provider/WalletContext";
+import { AppProvider } from "@/provider/app-provider";
+import { Toaster } from "sonner";
 const rajdhani = Rajdhani({
   variable: "--font-rajdhani",
   subsets: ["latin"],
@@ -30,10 +32,13 @@ export default function RootLayout({
       lang="en"
       className={`${rajdhani.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      
+
       <body className="min-h-full flex flex-col bg-paper ">
-        <Navbar />
-        <main className="flex-1 pt-18">{children}</main>
+        <AppProvider>
+          <Navbar />
+          <main className="flex-1 pt-18">{children}</main>
+          <Toaster richColors position="top-right" />
+        </AppProvider>
       </body>
     </html>
   );

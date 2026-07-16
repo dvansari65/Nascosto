@@ -16,7 +16,7 @@ export class MarketplaceService {
   static async listCard(signer: ethers.Signer, tokenId: string | bigint, priceInWei: bigint) {
     // 1. Client-side encryption
     const encryptedPriceHandle = await encryptAmount(priceInWei, signer);
-    
+
     // 2. Submit listing transaction
     const contract = getMarketplaceContract(signer);
     const tx = await contract.listCard(CONTRACT_ADDRESSES.SHADOW_CARD, tokenId, encryptedPriceHandle);
@@ -42,7 +42,7 @@ export class MarketplaceService {
   static async fetchActiveListings(providerOrSigner: ethers.Signer | ethers.Provider): Promise<Listing[]> {
     const contract = getMarketplaceContract(providerOrSigner);
     const activeListings: Listing[] = [];
-    
+
     for (let i = 1; i <= 10; i++) {
       try {
         const listing = await contract.listings(CONTRACT_ADDRESSES.SHADOW_CARD, i);
@@ -76,5 +76,45 @@ export class MarketplaceService {
     // Passing "0x" as a dummy proof if client-side proof generation isn't hooked up yet
     const tx = await contract.acceptOffer(CONTRACT_ADDRESSES.SHADOW_CARD, tokenId, buyer, proof);
     return tx.wait();
+  }
+
+  static async delistCard(
+    signer: ethers.Signer,
+    nftContract: string,
+    tokenId: string | bigint
+  ): Promise<void> {
+    const contract = getMarketplaceContract(signer);
+    if (!contract) {
+      throw new Error("Marketplace contract not configured");
+    }
+
+    try {
+      const tx = await contract.delistCard(nftContract, tokenId);
+      const receipt = await tx.wait();
+
+      if (!receipt || receipt.status !== 1) {
+        throw new Error("Delist transaction failed or was reverted");
+      }
+
+      const delistedLog = receipt?.logs?.map((log: any) => {
+        try {
+          console.log("logs:", log)
+          return contract.interface.parseLog(log);
+        } catch {
+          return null;
+        }
+      })
+        .find((parsed: any) => parsed?.name === "CardDelisted");
+
+      if (!delistedLog) {
+        throw new Error("Delist succeeded but CardDelisted event was not found");
+      }
+    } catch (error: any) {
+      if (error.data) {
+        console.log(contract.interface.parseError(error.data));
+        throw new Error(contract.interface.parseError(error.data)?.name)
+      }
+      throw error
+    }
   }
 }

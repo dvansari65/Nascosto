@@ -20,6 +20,18 @@
   --color-signal-400: #4fcbb0;
   --color-signal-500: #2fae92;
   --color-signal-600: #218a74;
+
+   /* Bloom — your second brand accent, currently scattered as raw hex */
+   --color-bloom-100: #f9f3ea;
+   --color-bloom-200: #f1cdea;
+   --color-bloom-300: #e4dae2;
+   --color-bloom-500: #fa93e5;
+   --color-bloom-600: #a99b89;
+ 
+   /* Foil — fixes the undefined var(--color-foil-400) reference */
+   --color-foil-300: #f5e6b8;
+   --color-foil-400: #d4af37; /* actual metallic gold, fits "collectible card" foil framing */
+   --color-abyss: #12100e;
 }
 
 :root {
@@ -28,7 +40,7 @@
 
 html,
 body {
-  background-color: var(--color-paper);
+  background-color: white;
   color: var(--color-ink-950);
   font-family: var(--font-body);
 }
@@ -109,4 +121,77 @@ body {
 .scrollbar-none {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+@keyframes shine-sweep {
+  0% { transform: translate(-120%, 120%) rotate(25deg); }
+  100% { transform: translate(220%, -220%) rotate(25deg); }
+}
+
+.shine-card::before,
+.shine-card::after {
+  content: "";
+  position: absolute;
+  bottom: -20%;
+  left: -30%;
+  width: 8%;
+  height: 160%;
+  background: rgba(255, 255, 255, 0.55);
+  transform: translate(-120%, 120%) rotate(25deg);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.shine-card::after {
+  left: -20%;
+  width: 4%;
+  transition-delay: 60ms;
+}
+
+.shine-card:hover::before,
+.shine-card:hover::after {
+  animation: shine-sweep 0.9s ease forwards;
+  opacity: 1;
+}
+
+.text-color-1{
+  color: rgb(54, 54, 55);
+}
+.text-color-2 {
+  color: rgb(0, 0, 3);
+}
+
+.button-color-1{
+  background-color: rgb(5, 5, 5);;
+}
+
+@keyframes flame-flicker {
+  0%, 100% { transform: scale(1) translateY(0); opacity: 0.5; }
+  50% { transform: scale(1.06) translateY(-2px); opacity: 0.75; }
+}
+
+@keyframes holo-spin {
+  to { filter: hue-rotate(360deg); }
+}
+
+.card-mat {
+  position: relative;
+  isolation: isolate;
+}
+
+.card-mat::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  background: radial-gradient(circle at 50% 60%, var(--glow-color) 0%, transparent 68%);
+  filter: blur(20px);
+  animation: flame-flicker 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.card-mat--holo::before {
+  background: conic-gradient(from 0deg, #ff5f6d, #f9d423, #22c55e, #3b82f6, #a855f7, #ff5f6d);
+  animation: flame-flicker 3s ease-in-out infinite, holo-spin 5s linear infinite;
+  opacity: 0.6;
 }

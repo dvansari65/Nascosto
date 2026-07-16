@@ -7,8 +7,10 @@ import {
   useDisconnect,
   useWalletClient,
 } from "wagmi";
+import { getWalletClient } from "@wagmi/core";
 import { BrowserProvider, JsonRpcSigner } from "ethers";
 import type { Client } from "viem";
+import { wagmiConfig } from "@/lib/wagmi";
 
 interface WalletContextType {
   address: `0x${string}` | undefined;
@@ -38,9 +40,9 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const { address, isConnected } = useAccount();
   const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
-  const { data: walletClient } = useWalletClient();
 
   const getEthersSigner = async () => {
+    const walletClient = await getWalletClient(wagmiConfig);
     if (!walletClient) return null;
     return clientToSigner(walletClient);
   };
@@ -58,7 +60,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo(
     () => ({ address, isConnected, getEthersSigner, connectWallet, disconnectWallet }),
-    [address, isConnected, walletClient]
+    [address, isConnected]
   );
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
