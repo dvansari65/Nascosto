@@ -47,7 +47,7 @@ contract ShadowCardsMarketplace {
     // Events
     event CardListed(address indexed nftContract, uint256 indexed tokenId, address indexed seller, bytes32 encryptedPriceHandle);
     event CardDelisted(address indexed nftContract, uint256 indexed tokenId);
-    event OfferSubmitted(address indexed nftContract, uint256 indexed tokenId, address indexed buyer, bytes32 encryptedAmountHandle);
+    event OfferSubmitted(address indexed nftContract, uint256 indexed tokenId, address indexed buyer,address seller, bytes32 encryptedAmountHandle);
     event OfferAccepted(address indexed nftContract, uint256 indexed tokenId, address indexed buyer);
 
     constructor(address _settlementContract, address _paymentToken) {
@@ -79,6 +79,7 @@ contract ShadowCardsMarketplace {
     }
 
     function submitOffer(address nftContract, uint256 tokenId, bytes32 encryptedAmountHandle) external {
+         Listing storage listing = listings[nftContract][tokenId];
         if (listings[nftContract][tokenId].status != ListingStatus.Listed) revert InvalidListing();
 
         offers[nftContract][tokenId][msg.sender] = Offer({
@@ -89,7 +90,7 @@ contract ShadowCardsMarketplace {
             withdrawn: false
         });
 
-        emit OfferSubmitted(nftContract, tokenId, msg.sender, encryptedAmountHandle);
+        emit OfferSubmitted(nftContract, tokenId, msg.sender, listing.seller, encryptedAmountHandle);
     }
 
     function acceptOffer(
