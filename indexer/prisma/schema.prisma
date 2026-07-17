@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Card {
+  tokenId     Int       @id
+  owner       String
+  metadataURI String
+  name        String?
+  description String?
+  image       String?
+  sport       String?
+  rarity      String?
+  series      String?
+  edition     String?
+  
+  // Relations
+  listing     Listing?
+  offers      Offer[]
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Listing {
+  id                   String   @id @default(uuid())
+  tokenId              Int      @unique
+  seller               String
+  status               String   // "Listed", "Sold", "Delisted"
+  encryptedPriceHandle String
+  
+  // Relation
+  card                 Card     @relation(fields: [tokenId], references: [tokenId])
+  
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model Offer {
+  id                    String   @id @default(uuid())
+  tokenId               Int
+  buyer                 String
+  reciever              String
+  encryptedAmountHandle String
+  status                String   // "Pending", "Accepted", "Withdrawn"
+  
+  // Relation
+  card                  Card     @relation(fields: [tokenId], references: [tokenId])
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@unique([tokenId, buyer])
+}
