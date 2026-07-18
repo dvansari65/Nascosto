@@ -56,11 +56,11 @@ export const ForWho = () => {
     const [activeId, setActiveId] = useState(4);
 
     return (
-        <section className="relative bg-white  lg:px-20 lg:py-28 w-full">
-            <div className="ml-15">
+        <section className="relative w-full bg-white px-6 py-16 sm:px-8 sm:py-20 md:px-12 md:py-24 lg:px-20 lg:py-28">
+            <div className="lg:ml-15">
 
                 {/* Heading — left-aligned, two lines */}
-                <div className="mb-12">
+                <div className="mb-8 sm:mb-10 lg:mb-12">
                     <h2 className="font-display text-4xl font-medium leading-[1.08] tracking-tight text-neutral-900 sm:text-5xl lg:text-[3.5rem]">
                         Nascosto is built for collectors
                     </h2>
@@ -71,9 +71,9 @@ export const ForWho = () => {
 
                 {/* Main card */}
                 <div className="w-full flex justify-start">
-                    <div className="flex  flex-row justify-center items-start border-t border-gray-300 ">
-                        {/* ① Tick strip rail */}
-                        <div className=" flex  border border-gray-300">
+                    <div className="flex w-full flex-col items-start border-t border-gray-300 lg:flex-row lg:justify-center">
+                        {/* ① Tick strip rail — pairs with the portrait art, so it only makes sense from lg up */}
+                        <div className="hidden border border-gray-300 lg:flex">
                             <div className=" relative  " style={{ width: 50 }}>
                                 <TickStrip
                                     className="border-neutral-300 h-full "
@@ -96,7 +96,7 @@ export const ForWho = () => {
                                 />
                             </div>
                         </div>
-                        <div className="w-[70vh] overflow-hidden border border-t-transparent b border-l-transparent b border-b-transparent border-gray-300">
+                        <div className="w-full overflow-hidden border-x border-b border-gray-300 lg:w-[70vh] lg:border lg:border-t-transparent lg:border-l-transparent lg:border-b-transparent">
                             {ACCORDION_ITEMS.map((item) => {
                                 const isActive = activeId === item.id;
 
@@ -121,7 +121,7 @@ export const ForWho = () => {
                                                 }`}
                                         >
                                             <div className="overflow-hidden">
-                                                <ul className=" px-14 pt-2 pb-6 sample-color-4 border-t border-gray-300 ">
+                                                <ul className=" px-6 pt-2 pb-6 sm:px-10 lg:px-14 sample-color-4 border-t border-gray-300 ">
                                                     {item.points.map((point) => (
                                                         <li
                                                             key={point}

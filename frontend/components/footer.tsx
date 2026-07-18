@@ -51,10 +51,10 @@ const SOCIAL_LINKS = [
 export function Footer() {
   return (
     <footer className="relative border-t border-dashed border-neutral-300 bg-pink-100 px-6 py-16 lg:px-20">
-      <TickStrip className="sample-color-4 text-gray-300" align="left" cells={400} cellSize={6} width={120} />
-      <TickStrip className="sample-color-4 text-gray-300"  align="right" cells={400} cellSize={6} width={120} />
+      <TickStrip className="sample-color-4 text-gray-300" align="left" cells={400} cellSize={6}  />
+      <TickStrip className="sample-color-4 text-gray-300"  align="right" cells={400} cellSize={6}  />
 
-      <div className="mx-auto max-w-260">
+      <div className="mx-auto lg:max-w-260">
         <div className="flex flex-col gap-10 border-b border-neutral-200 pb-12 lg:flex-row lg:items-start lg:justify-between">
          <Logo/>
 
