@@ -1,7 +1,7 @@
 type ImageOpts = { width?: number; height?: number; fit?: "cover" | "contain" | "scaleDown" };
 
 export function toPreviewSrc(uri: string, opts?: ImageOpts) {
-  const gateway = process.env.NEXT_PUBLIC_PINATA_GATEWAY;
+  const gateway = process.env.PINATA_GATEWAY;
   let base: string;
 
   if (uri.startsWith("ipfs://")) {
@@ -23,4 +23,18 @@ export function toPreviewSrc(uri: string, opts?: ImageOpts) {
   params.set("img-format", "webp");
 
   return `${base}?${params.toString()}`;
+}
+
+
+export async function fetchPinataMetadata(uri: string) {
+  try {
+    const url = toPreviewSrc(uri);
+    // Remove optimization params for metadata fetch if any, but toPreviewSrc with no opts returns gateway URL.
+    const response = await fetch(url);
+    if (!response.ok) return null;
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching metadata:", error);
+    return null;
+  }
 }
