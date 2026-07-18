@@ -16,7 +16,7 @@ export default function DashboardPage() {
   const { cardForm, updateCardForm, resetCardForm } = useCardForm();
   const { mutateAsync: uploadImage, isPending: isUploadingImage } = useImageUpload();
   const { isMinting, mintCard } = useMintCard({ getEthersSigner, address });
-  
+
   const listMutation = useListCard({ getEthersSigner, address });
   const [tokenIdToList, setTokenIdToList] = useState<string | null>(null);
   const [askingPrice, setAskingPrice] = useState("");
@@ -36,7 +36,7 @@ export default function DashboardPage() {
 
   const handleImageSelect = async (file?: File) => {
     if (!file) return;
-    const uri =  await uploadImage(file);
+    const uri = await uploadImage(file);
     if (uri) {
       updateCardForm("imageUri", uri);
     }
@@ -45,16 +45,16 @@ export default function DashboardPage() {
   const handleMint = async () => {
     try {
       const result = await mintCard(cardForm);
-      if(result.success){
+      if (result.success) {
         toast.success("Card minted successfully!")
         if (result.tokenId !== null) {
           setTokenIdToList(result?.tokenId?.toString()); // pre-fill, ready to list immediately
-          
+
         }
       } else if (result.imageRolledBack) {
         updateCardForm("imageUri", "");
       }
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error.message)
       resetCardForm()
     }
