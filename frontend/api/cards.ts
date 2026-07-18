@@ -9,7 +9,7 @@ export const fetchAllCards = () => {
             try {
                 const provider = getPublicProvider();
                 const activeListings = await MarketplaceService.fetchActiveListings(provider);
-                console.log("active listings:",activeListings)
+                
                 if(!activeListings){
                     return []
                 }
