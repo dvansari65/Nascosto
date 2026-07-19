@@ -42,3 +42,9 @@ export type CardForm = {
   // Asset
   imageUri: string;
 };
+
+export interface Card {
+  name: string | null,
+  image: string | null
+}
+
