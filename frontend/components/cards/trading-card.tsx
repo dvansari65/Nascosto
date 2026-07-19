@@ -7,6 +7,7 @@ import { getTrait, getRarityStyle } from "@/helpers/cardRarity";
 import { getRarityGlow } from "@/helpers/rarityGlow";
 import { CardDetailsModal } from "../modal/card-details-modal";
 import { CardArtwork } from "./card-artwork";
+import { TitleOfCard } from "./name";
 
 type TradingCardItemProps = {
     listing: Listing;
@@ -53,7 +54,6 @@ export function TradingCardItem({
                     if (e.key === "Enter" || e.key === " ") setDetailsOpen(true);
                 }}
             >
-
                 <div
                     className={`card-mat ${glow.isHolo ? "card-mat--holo" : ""} p-2.5`}
                     style={!glow.isHolo ? ({ "--glow-color": glow.color } as React.CSSProperties) : undefined}
@@ -68,14 +68,8 @@ export function TradingCardItem({
                     </div>
                 </div>
 
-                <div className="flex justify-center items-center">
-                    <div className="min-w-0">
-                        {metadata?.name && (
-                            <p className="mt-0.5 truncate text-xs font-medium text-slate-900">
-                                {metadata?.name.toString()}
-                            </p>
-                        )}
-                    </div>
+                <div className="flex justify-center items-center px-4 pb-3 pt-2">
+                    <TitleOfCard name={metadata?.name}/>
                 </div>
             </div>
 
