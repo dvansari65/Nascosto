@@ -1,9 +1,10 @@
 import { app } from "../server";
 import { getTokenIds } from "../services/tokenId";
+import {Router} from "express"
 
+const router = Router()
 
-
-app.get("/api/tokenIds/:publicKey",async (req,res)=>{
+router.get("/:publicKey",async (req,res)=>{
     try {
         const {publicKey} = req.params;
         const tokenIds = await getTokenIds(publicKey);
@@ -12,6 +13,9 @@ app.get("/api/tokenIds/:publicKey",async (req,res)=>{
             data:tokenIds
         })
     } catch (error:any) {
-        return res.status(500).json({error:error.message || "Failed to fetch tokens!!"})
+        return res.status(500).json({message:error.message || "Failed to fetch tokens!!"})
     }
 })
+
+
+export default router

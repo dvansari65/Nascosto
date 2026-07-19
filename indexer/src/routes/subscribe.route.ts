@@ -1,9 +1,10 @@
 import { app } from "../server";
-import { subscribe } from "../services/subscribe";
+import { subscribe, totalSubscribed } from "../services/subscribe";
+import {Router} from "express"
 
+const router = Router()
 
-
-app.post("/api/subscribe/:email",async(req,res)=>{
+router.post("/:email",async(req,res)=>{
     try {
         const {email} = req.params
         const result = await subscribe(email)
@@ -18,3 +19,19 @@ app.post("/api/subscribe/:email",async(req,res)=>{
         })
     }
 })
+
+router.get("/count",async(req,res)=>{
+    try {
+        const count = await totalSubscribed();
+        return res.status(200).json({
+            message:"Successfully fetched!",
+            data:count
+        })
+    } catch (error:any) {
+        return res.status(500).json({
+            message:error.message || "Server error!"
+        })
+    }
+})
+
+export default router
