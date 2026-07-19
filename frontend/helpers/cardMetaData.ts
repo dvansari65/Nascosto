@@ -18,6 +18,9 @@ export const CardMetadataUtil = { getAttribute };
 
 export async function fetchCardMetadata(tokenUri: string): Promise<CardMetadata> {
   const url = toPreviewSrc(tokenUri);
+  if(!url){
+    throw new Error("URL not found!")
+  }
   const res = await fetch(url);
 
   if (!res.ok) {

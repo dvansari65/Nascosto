@@ -3,7 +3,9 @@ type ImageOpts = { width?: number; height?: number; fit?: "cover" | "contain" | 
 export function toPreviewSrc(uri: string, opts?: ImageOpts) {
   const gateway = process.env.NEXT_PUBLIC_PINATA_GATEWAY;
   let base: string;
-
+  if(!uri){
+    return
+  }
   if (uri.startsWith("ipfs://")) {
     const cid = uri.replace("ipfs://", "");
     base = gateway ? `https://${gateway}/ipfs/${cid}` : `https://ipfs.io/ipfs/${cid}`;
