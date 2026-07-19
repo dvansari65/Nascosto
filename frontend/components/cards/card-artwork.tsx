@@ -64,17 +64,11 @@ export function CardArtwork({
 
             <button
                 onClick={onDetailsClick}
-                className="absolute right-2.5 top-2.5 flex size-7 items-center justify-center rounded-full bg-black/30 text-white opacity-0 backdrop-blur-sm transition-opacity duration-200 hover:bg-black/50 group-hover:opacity-100"
+                className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white opacity-0 shadow-sm ring-1 ring-inset ring-white/20 backdrop-blur-md transition-all duration-300 hover:bg-white/20 hover:scale-105 active:scale-95 group-hover:opacity-100"
                 aria-label="Card details"
             >
-                <MoreVertical size={14} />
+                <MoreVertical size={16} strokeWidth={2.5} />
             </button>
-
-            <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
-                <Lock size={10} strokeWidth={2.5} />
-                Confidential
-            </div>
-
             {sport && (
                 <span className="sr-only">{sport}</span>
             )}
