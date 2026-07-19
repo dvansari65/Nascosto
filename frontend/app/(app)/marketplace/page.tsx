@@ -8,22 +8,25 @@ import { OfferModal } from "@/components/modal/submit-offer";
 import { fetchAllCards } from "@/api/cards";
 import { submitOffer } from "@/api/submitEncryptOffer";
 import { deList } from "@/api/deList";
+import { DotsLoader } from "@/components/loaders/dots-loader";
 
 export default function MarketplacePage() {
-  
+
   const [activeOfferTokenId, setActiveOfferTokenId] = useState<bigint | null>(null);
   const { data: listings, isPending, error, isError } = fetchAllCards()
   const { mutate, isPending: isSubmittingOffer, error: submitOfferError } = submitOffer()
   const cards = useListingsWithMetadata(listings || []);
-  const {mutate:deListCard, isPending:deListing} = deList()
+ 
+  const { mutate: deListCard, isPending: deListing } = deList()
 
   const submitEncryptedOffer = async (amount: string) => {
     mutate({ amount, activeOfferTokenId }, {
       onSuccess: () => {
-        toast.success("Offer submitted!!")
+        toast.success("Offer submitted securely!");
+        setActiveOfferTokenId(null);
       },
       onError: (e) => {
-        toast.error(e.message)
+        toast.error(`Failed to submit offer: ${e.message}`);
       }
     })
   };
@@ -31,7 +34,9 @@ export default function MarketplacePage() {
   return (
     <div className="mx-auto max-w-350 px-6 lg:px-10 py-12">
       {isPending ? (
-        <p className="text-neutral-500">Loading listings from the blockchain...</p>
+        <div className="relative overflow-hidden w-full h-screen  flex justify-center">
+          <DotsLoader className="absolute top-[40%] left-[45%]"/>
+        </div>
       ) : isError ? (
         <div className="rounded-xl border border-dashed border-red-300 bg-red-50 p-12 text-center">
           <p className="text-red-600">{error.message}</p>
@@ -41,7 +46,7 @@ export default function MarketplacePage() {
           <p className="text-neutral-500 mb-4">No cards are currently listed.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {cards.map(({ listing, metadata, metadataLoading, metadataError }) => (
             <TradingCardItem
               key={listing.tokenId.toString()}
@@ -50,14 +55,13 @@ export default function MarketplacePage() {
               metadataLoading={metadataLoading}
               metadataError={metadataError}
               onMakeOffer={setActiveOfferTokenId}
-              deList={()=>deListCard(listing.tokenId)}
+              deList={() => deListCard(listing.tokenId)}
               isMakingOffer={isSubmittingOffer}
               isDelisting={deListing}
             />
           ))}
         </div>
       )}
-
       {activeOfferTokenId !== null && (
         <OfferModal
           tokenId={activeOfferTokenId.toString()}
