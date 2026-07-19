@@ -3,18 +3,23 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
-import { Menu, X, ChevronDown, LogOut, Copy, Check } from "lucide-react";
+import { Menu, X, LogOut, Copy, Check } from "lucide-react";
 import { Logo } from "./logo";
 import { Button } from "./button";
 import { useWallet } from "@/provider/WalletContext";
 import { useIsContractOwner } from "@/hooks/useIsContractOwner";
 import { useEthersSigner } from "@/hooks/useEtherSigner";
 
-const BASE_NAV_LINKS = [
+const LANDING_LINKS = [
   { label: "Marketplace", href: "/marketplace" },
-  { label: "How it works", href: "#how-it-works" },
-  { label: "Security", href: "#security" },
+  { label: "Security", href: "/#security" },
   { label: "Docs", href: "#" },
+];
+
+const APP_LINKS = [
+  { label: "Marketplace", href: "/marketplace" },
+  { label: "Offers", href: "/offer" },
+ 
 ];
 
 function truncateAddress(address: string) {
@@ -49,7 +54,7 @@ function WalletButton({ onNavigate }: { onNavigate?: () => void }) {
   const handleConnect = async () => {
     try {
       setConnectError("");
-      await connectWallet();
+      connectWallet();
       onNavigate?.();
     } catch (e) {
       setConnectError("Wallet connection failed. Is Core or MetaMask installed?");
@@ -126,9 +131,15 @@ export function Navbar() {
   const signer = useEthersSigner();
   const { isOwner } = useIsContractOwner(address, signer);
 
+  useEffect(()=>{
+    console.log("is owner:",isOwner)
+  },[isOwner,address])
+  const isLandingPage = pathname === "/";
+  const baseLinks = isLandingPage ? LANDING_LINKS : APP_LINKS;
+
   const navLinks = isOwner
-    ? [...BASE_NAV_LINKS, { label: "My Cards", href: "/my-cards" }, { label: "Dashboard", href: "/dashboard" }]
-    : BASE_NAV_LINKS;
+    ? [...baseLinks, { label: "My Cards", href: "/my-cards" }, { label: "Dashboard", href: "/dashboard" }]
+    : baseLinks;
 
   return (
     <header className="fixed inset-x-0 top-0 z-50   border-b border-neutral-200 bg-white backdrop-blur-md">
@@ -144,9 +155,8 @@ export function Navbar() {
               <Link
                 key={link.label}
                 href={link.href}
-                className={`rounded-full px-4 py-2 text-[18px] font-medium transition-colors hover:bg-pink-200 hover:text-black ${
-                  isActive ? "bg-pink-200 text-black" : "text-neutral-600"
-                }`}
+                className={`rounded-full px-4 py-2 text-[18px] font-medium transition-colors hover:bg-pink-200 hover:text-black ${isActive ? "bg-pink-200 text-black" : "text-neutral-600"
+                  }`}
               >
                 {link.label}
               </Link>
@@ -177,9 +187,8 @@ export function Navbar() {
                   key={link.label}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className={`rounded-lg px-3 py-2.5 text-base transition-colors hover:bg-neutral-100 hover:text-black ${
-                    isActive ? "bg-pink-200 text-black" : "text-neutral-600"
-                  }`}
+                  className={`rounded-lg px-3 py-2.5 text-base transition-colors hover:bg-neutral-100 hover:text-black ${isActive ? "bg-pink-200 text-black" : "text-neutral-600"
+                    }`}
                 >
                   {link.label}
                 </Link>
