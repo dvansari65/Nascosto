@@ -1,46 +1,18 @@
 "use client"
 
+import { getMyOffers } from "@/api/http"
 import { DotsLoader } from "@/components/loaders/dots-loader"
+import { SimpleButton } from "@/components/simple-button"
 import { useSocket } from "@/provider/socket-provider"
 import { useWallet } from "@/provider/WalletContext"
 import { Copy } from "lucide-react"
-import Image from "next/image"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
-interface Card {
-    name: string | null,
-    image: string | null
-}
-
-interface Offer {
-    tokenId: number,
-    encryptedAmountHandle: string,
-    buyer: string,
-    status: string,
-    card: Card
-}
 
 export default function OfferPage() {
-    const [offers, setOffers] = useState<Offer[] | []>([]);
     const { address } = useWallet()
     const socket = useSocket();
-    const [loading, setLoading] = useState(true)
-    useEffect(() => {
-        if (!socket || !address) {
-            return
-        }
-
-        socket.emit("on-offers", address.toString())
-        const handleOffers = (data: any) => {
-            console.log("offers:", data);
-            setOffers(data)
-            setLoading(false)
-        }
-        socket.on("offers", handleOffers);
-        return () => {
-            socket.off("offers", handleOffers)
-        }
-    }, [socket, address])
+    const { data: offers, isPending, isError, error } = getMyOffers(address?.toString())
 
     const statusColors = (status: string | null) => {
         if (!status) {
@@ -56,23 +28,25 @@ export default function OfferPage() {
             return "text-amber-500 bg-amber-100"
         }
     }
-    const fetchImage = async (url: string | null) => {
-        if (!url) {
-            return
-        }
-        return await fetch(url)
-    }
-    if (!loading && offers.length == 0) {
+
+    if (!isPending && (offers?.length == 0 || !socket)) {
         return (
             <div className="w-full h-screen flex justify-center items-center text-3xl">
                 Oops! There's no offers!
             </div>
         )
     }
-    if (loading) {
+    if (isPending) {
         return (
             <div className="relative overflow-hidden w-full h-screen  flex justify-center">
                 <DotsLoader className="absolute top-[40%] left-[45%]" />
+            </div>
+        )
+    }
+    if (isError) {
+        return (
+            <div className="w-full h-screen flex justify-center items-center text-3xl">
+                {error.message || "Failed to fetch Offers!"}
             </div>
         )
     }
@@ -81,14 +55,14 @@ export default function OfferPage() {
         <div className="w-full h-screen py-4 px-2">
             <div className="grid grid-cols-1 gap-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-5">
                 {
-                    offers.map((offer, i) => (
+                    offers?.map((offer, i) => (
                         <div className="flex flex-col gap-1.5 p-3 border rounded-xl" key={offer.tokenId ?? i}>
-                            
+
                             {offer.card?.image && (
                                 <div className="w-full aspect-square relative rounded-lg overflow-hidden bg-neutral-100 my-2">
-                                    <img 
-                                        src={offer.card.image} 
-                                        alt={offer.card.name || "Trading Card"} 
+                                    <img
+                                        src={offer.card.image}
+                                        alt={offer.card.name || "Trading Card"}
                                         className=" object-cover"
                                     />
                                 </div>
@@ -134,9 +108,14 @@ export default function OfferPage() {
                                 <span className="text-sm font-bold shrink-0">
                                     Name:
                                 </span>
-                               <span>
-                                {offer.card?.name || ""}
-                               </span>
+                                <span>
+                                    {offer.card?.name || ""}
+                                </span>
+                            </div>
+                            <div className="w-full flex justify-center items-center">
+                                <SimpleButton className="bg-slate-900 text-white hover:cursor-pointer">
+                                    Accept Offer
+                                </SimpleButton>
                             </div>
                         </div>
                     ))
