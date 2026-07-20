@@ -1,12 +1,7 @@
 "use client";
 
 import { createContext, useContext, useMemo, ReactNode } from "react";
-import {
-  useAccount,
-  useConnect,
-  useDisconnect,
-  useWalletClient,
-} from "wagmi";
+import { useAccount, useConnect, useDisconnect, useWalletClient } from "wagmi";
 import { getWalletClient } from "@wagmi/core";
 import { BrowserProvider, JsonRpcSigner } from "ethers";
 import type { Client } from "viem";
@@ -50,7 +45,9 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const connectWallet = () => {
     const injectedConnector = connectors.find((c) => c.id === "injected");
     if (!injectedConnector) {
-      alert("Please install an Avalanche-compatible wallet like Core or MetaMask.");
+      alert(
+        "Please install an Avalanche-compatible wallet like Core or MetaMask.",
+      );
       return;
     }
     connect({ connector: injectedConnector });
@@ -59,11 +56,19 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const disconnectWallet = () => disconnect();
 
   const value = useMemo(
-    () => ({ address, isConnected, getEthersSigner, connectWallet, disconnectWallet }),
-    [address, isConnected]
+    () => ({
+      address,
+      isConnected,
+      getEthersSigner,
+      connectWallet,
+      disconnectWallet,
+    }),
+    [address, isConnected],
   );
 
-  return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
+  return (
+    <WalletContext.Provider value={value}>{children}</WalletContext.Provider>
+  );
 }
 
 export function useWallet() {
@@ -73,4 +78,3 @@ export function useWallet() {
   }
   return context;
 }
-

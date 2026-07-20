@@ -20,12 +20,12 @@ export function ListCardPanel({
   listStatus,
   onList,
 }: ListCardPanelProps) {
-
   return (
     <div className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
       <h2 className="text-2xl font-bold mb-4 font-display">List a Card</h2>
       <p className="text-neutral-600 mb-6">
-        Enter your Token ID to list it. The smart contract will automatically encrypt your ask price using the eERC SDK.
+        Enter your Token ID to list it. The smart contract will automatically
+        encrypt your ask price using the eERC SDK.
       </p>
       <div className="flex flex-col gap-4">
         <div className="flex gap-4">
@@ -45,7 +45,11 @@ export function ListCardPanel({
           />
         </div>
         <div className="w-full flex justify-center items-center  ">
-          <SimpleButton onClick={onList} className="button-color-1 text-white  hover:cursor-pointer" disabled={isListing}>
+          <SimpleButton
+            onClick={onList}
+            className="button-color-1 text-white  hover:cursor-pointer"
+            disabled={isListing}
+          >
             {isListing ? "Listing..." : "List Card"}
           </SimpleButton>
         </div>

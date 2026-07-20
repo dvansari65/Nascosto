@@ -38,7 +38,8 @@ export function Features() {
       <div className="mx-auto max-w-350">
         <div className="mx-auto mb-14 max-w-2xl text-center">
           <h2 className="font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-            Nascosto keeps <span className="text-pink-300">what&apos;s private, private.</span>
+            Nascosto keeps{" "}
+            <span className="text-pink-300">what&apos;s private, private.</span>
           </h2>
           <p className="mt-4 text-base leading-relaxed text-neutral-400">
             Every listing is public. Every negotiation is not. Here&apos;s what
@@ -70,7 +71,7 @@ export function Features() {
 
           <div className="absolute inset-y-0 left-3/4 hidden w-px lg:block">
             <TickStrip
-                className="text-neutral-600"
+              className="text-neutral-600"
               align="left"
               orientation="vertical"
               cells={80}

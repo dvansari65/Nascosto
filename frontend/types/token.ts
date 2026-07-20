@@ -1,4 +1,4 @@
 export interface TokenData {
-    tokenId: number;
-    name: string ;
-  }
+  tokenId: number;
+  name: string;
+}

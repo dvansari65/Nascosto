@@ -44,7 +44,6 @@ export type CardForm = {
 };
 
 export interface Card {
-  name: string | null,
-  image: string | null
+  name: string | null;
+  image: string | null;
 }
-

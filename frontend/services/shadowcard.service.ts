@@ -6,9 +6,8 @@ export class ShadowCardService {
     signer: ethers.Signer,
     address: string,
     uri: string,
-    contentHash: string
+    contentHash: string,
   ): Promise<bigint | null> {
-
     if (!address) {
       throw new Error("Recipient address is required");
     }
@@ -36,8 +35,8 @@ export class ShadowCardService {
       .find((parsed: any) => parsed?.name === "CardMinted");
 
     if (!mintedLog) {
-      console.log("minted log not found!")
-      return null
+      console.log("minted log not found!");
+      return null;
     }
     return mintedLog.args.tokenId as bigint;
   }
@@ -48,7 +47,10 @@ export class ShadowCardService {
    * ConfidentialSettlement.executeSettlement, so that's the address that
    * needs ERC-721 approval per EIP-721's msg.sender check.
    */
-  static async approveSettlement(signer: ethers.Signer, tokenId: string | bigint) {
+  static async approveSettlement(
+    signer: ethers.Signer,
+    tokenId: string | bigint,
+  ) {
     const contract = getShadowCardContract(signer);
     if (!contract) {
       return;
@@ -59,11 +61,11 @@ export class ShadowCardService {
 
   static async getTokenURI(
     providerOrSigner: ethers.Signer | ethers.Provider,
-    tokenId: string | bigint
+    tokenId: string | bigint,
   ) {
     const contract = getShadowCardContract(providerOrSigner);
     if (!contract) {
-      return
+      return;
     }
     return contract.tokenURI(tokenId);
   }

@@ -9,5 +9,5 @@ export const publicProvider = new JsonRpcProvider(
   {
     chainId: avalancheFuji.id,
     name: avalancheFuji.name,
-  }
+  },
 );

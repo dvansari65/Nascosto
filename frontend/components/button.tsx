@@ -10,8 +10,10 @@ import {
 } from "react";
 import { gsap } from "gsap";
 
-export interface ButtonProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "className"> {
+export interface ButtonProps extends Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  "className"
+> {
   children?: ReactNode;
   className?: string;
   containerClassName?: string;
@@ -37,7 +39,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       type = "button",
       ...props
     },
-    ref
+    ref,
   ) => {
     const buttonRef = useRef<HTMLButtonElement>(null);
     const shadowRef = useRef<HTMLSpanElement>(null);
@@ -79,7 +81,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             duration: 0.15,
             ease: "power2.out",
           },
-          ">" // only starts once the slide above has actually finished
+          ">", // only starts once the slide above has actually finished
         );
     };
 
@@ -102,7 +104,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             duration: 0.2,
             ease: "power2.out",
           },
-          "<" // runs at the same time as the shadow reset, not after
+          "<", // runs at the same time as the shadow reset, not after
         );
     };
 
@@ -135,7 +137,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         </button>
       </div>
     );
-  }
+  },
 );
 
 Button.displayName = "Button";

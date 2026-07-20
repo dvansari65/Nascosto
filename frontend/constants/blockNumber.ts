@@ -1,1 +1,1 @@
-export const DEPLOYMENT_BLOCK = 56971339
+export const DEPLOYMENT_BLOCK = 56971339;

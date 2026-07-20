@@ -19,7 +19,6 @@ const LANDING_LINKS = [
 const APP_LINKS = [
   { label: "Marketplace", href: "/marketplace" },
   { label: "Offers", href: "/offer" },
- 
 ];
 
 function truncateAddress(address: string) {
@@ -57,7 +56,9 @@ function WalletButton({ onNavigate }: { onNavigate?: () => void }) {
       connectWallet();
       onNavigate?.();
     } catch (e) {
-      setConnectError("Wallet connection failed. Is Core or MetaMask installed?");
+      setConnectError(
+        "Wallet connection failed. Is Core or MetaMask installed?",
+      );
     }
   };
 
@@ -131,14 +132,18 @@ export function Navbar() {
   const signer = useEthersSigner();
   const { isOwner } = useIsContractOwner(address, signer);
 
-  useEffect(()=>{
-    console.log("is owner:",isOwner)
-  },[isOwner,address])
+  useEffect(() => {
+    console.log("is owner:", isOwner);
+  }, [isOwner, address]);
   const isLandingPage = pathname === "/";
   const baseLinks = isLandingPage ? LANDING_LINKS : APP_LINKS;
 
   const navLinks = isOwner
-    ? [...baseLinks, { label: "My Cards", href: "/my-cards" }, { label: "Dashboard", href: "/dashboard" }]
+    ? [
+        ...baseLinks,
+        { label: "My Cards", href: "/my-cards" },
+        { label: "Dashboard", href: "/dashboard" },
+      ]
     : baseLinks;
 
   return (
@@ -155,8 +160,9 @@ export function Navbar() {
               <Link
                 key={link.label}
                 href={link.href}
-                className={`rounded-full px-4 py-2 text-[18px] font-medium transition-colors hover:bg-pink-200 hover:text-black ${isActive ? "bg-pink-200 text-black" : "text-neutral-600"
-                  }`}
+                className={`rounded-full px-4 py-2 text-[18px] font-medium transition-colors hover:bg-pink-200 hover:text-black ${
+                  isActive ? "bg-pink-200 text-black" : "text-neutral-600"
+                }`}
               >
                 {link.label}
               </Link>
@@ -187,8 +193,9 @@ export function Navbar() {
                   key={link.label}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className={`rounded-lg px-3 py-2.5 text-base transition-colors hover:bg-neutral-100 hover:text-black ${isActive ? "bg-pink-200 text-black" : "text-neutral-600"
-                    }`}
+                  className={`rounded-lg px-3 py-2.5 text-base transition-colors hover:bg-neutral-100 hover:text-black ${
+                    isActive ? "bg-pink-200 text-black" : "text-neutral-600"
+                  }`}
                 >
                   {link.label}
                 </Link>

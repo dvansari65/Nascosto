@@ -1,5 +1,3 @@
-
-
 import { toast } from "sonner";
 import { uploadFileToIPFS } from "@/pinata/uploadToIpfs";
 import { useMutation } from "@tanstack/react-query";

@@ -15,12 +15,13 @@ function getPositionClass(
   align: NonNullable<TickStripProps["align"]>,
   isVertical: boolean,
   hasWidth: boolean,
-  hasHeight: boolean
+  hasHeight: boolean,
 ) {
   if (align === "left") return `${hasHeight ? "top-0" : "inset-y-0"} left-0`;
   if (align === "right") return `${hasHeight ? "top-0" : "inset-y-0"} right-0`;
   if (align === "top") return `top-0 ${hasWidth ? "left-0" : "inset-x-0"}`;
-  if (align === "bottom") return `bottom-0 ${hasWidth ? "left-0" : "inset-x-0"}`;
+  if (align === "bottom")
+    return `bottom-0 ${hasWidth ? "left-0" : "inset-x-0"}`;
 
   return isVertical ? "inset-y-0 left-0" : "inset-x-0 top-0";
 }
@@ -36,8 +37,10 @@ export function TickStrip({
   className = "border-neutral-300",
 }: TickStripProps) {
   const resolvedOrientation =
-    orientation ?? (align === "top" || align === "bottom" ? "horizontal" : "vertical");
-  const resolvedAlign = align ?? (resolvedOrientation === "horizontal" ? "top" : "left");
+    orientation ??
+    (align === "top" || align === "bottom" ? "horizontal" : "vertical");
+  const resolvedAlign =
+    align ?? (resolvedOrientation === "horizontal" ? "top" : "left");
   const isVertical = resolvedOrientation === "vertical";
   const stripWidth = width ?? (isVertical ? crossSize : undefined);
   const stripHeight = height ?? (isVertical ? undefined : crossSize);
@@ -46,7 +49,12 @@ export function TickStrip({
     "--strip-width": stripWidth == null ? undefined : `${stripWidth}px`,
     "--strip-height": stripHeight == null ? undefined : `${stripHeight}px`,
   } as CSSProperties;
-  const position = getPositionClass(resolvedAlign, isVertical, width != null, height != null);
+  const position = getPositionClass(
+    resolvedAlign,
+    isVertical,
+    width != null,
+    height != null,
+  );
 
   return (
     <div
@@ -62,7 +70,9 @@ export function TickStrip({
         <span
           key={index}
           className={`block ${className} ${
-            isVertical ? "h-[var(--cell-size)] border-b" : "w-[var(--cell-size)] border-r"
+            isVertical
+              ? "h-[var(--cell-size)] border-b"
+              : "w-[var(--cell-size)] border-r"
           }`}
         />
       ))}

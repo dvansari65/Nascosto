@@ -1,7 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../generated/prisma"
 }
-
 datasource db {
   provider = "postgresql"
 }
@@ -30,7 +30,7 @@ model Listing {
   id                   String   @id @default(uuid())
   tokenId              Int      @unique
   seller               String
-  status               String   // "Listed", "Sold", "Delisted"
+  status               ListingStatus @default(Delisted)   // "Listed", "Sold", "Delisted"
   encryptedPriceHandle String
   
   // Relation
@@ -44,9 +44,10 @@ model Offer {
   id                    String   @id @default(uuid())
   tokenId               Int
   buyer                 String
-  reciever              String
+  seller                String
   encryptedAmountHandle String
-  status                String   // "Pending", "Accepted", "Withdrawn"
+  encryptedForSeller    String 
+  status                OfferStatus   // "Pending", "Accepted", "Withdrawn"
   
   // Relation
   card                  Card     @relation(fields: [tokenId], references: [tokenId])
@@ -55,4 +56,20 @@ model Offer {
   updatedAt             DateTime @updatedAt
 
   @@unique([tokenId, buyer])
+}
+
+model Subscribe {
+  email       String @unique
+}
+
+enum OfferStatus {
+  Pending
+  Accepted
+  Withdrawn
+}
+
+enum ListingStatus {
+  Listed
+  Sold
+  Delisted
 }

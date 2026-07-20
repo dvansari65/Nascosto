@@ -1,7 +1,14 @@
 "use client";
 
 import { getSocket } from "@/lib/socket";
-import { ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import type { Socket } from "socket.io-client";
 
 interface SocketContextType {
@@ -19,11 +26,10 @@ const SocketContext = createContext<SocketContextType>({
 });
 
 export const SocketProvider = ({ children }: SocketProviderProps) => {
-
   const socket = useMemo(() => getSocket(), []);
-  useEffect(()=>{
-    console.log("socket :",socket)
-  },[])
+  useEffect(() => {
+    console.log("socket :", socket);
+  }, []);
   const [isConnected, setIsConnected] = useState(socket.connected);
 
   useEffect(() => {

@@ -39,7 +39,7 @@ export const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
       disabled = false,
       ...props
     },
-    ref
+    ref,
   ) => {
     const linkRef = useRef<HTMLAnchorElement>(null);
     const shadowRef = useRef<HTMLSpanElement>(null);
@@ -75,7 +75,7 @@ export const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
             duration: 0.15,
             ease: "power2.out",
           },
-          ">"
+          ">",
         );
     };
 
@@ -98,7 +98,7 @@ export const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
             duration: 0.2,
             ease: "power2.out",
           },
-          "<"
+          "<",
         );
     };
 
@@ -138,7 +138,7 @@ export const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
         </Link>
       </span>
     );
-  }
+  },
 );
 
 ButtonLink.displayName = "ButtonLink";

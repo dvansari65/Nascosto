@@ -9,19 +9,24 @@ export class SettlementService {
    * Encrypts the final transfer amount client-side before submission.
    */
   static async executeSettlement(
-    signer: ethers.Signer, 
-    listingId: string | bigint, 
-    offerId: string | bigint, 
-    finalPriceInWei: bigint
+    signer: ethers.Signer,
+    listingId: string | bigint,
+    offerId: string | bigint,
+    finalPriceInWei: bigint,
   ) {
     // 1. Encrypt the final settlement amount locally
-    const encryptedSettlementAmount = await encryptAmount(finalPriceInWei, signer);
+    const encryptedSettlementAmount = await encryptAmount(
+      finalPriceInWei,
+      signer,
+    );
 
     // 2. Execute atomic settlement (requires settlement contract instance)
     // const contract = getSettlementContract(signer);
     // const tx = await contract.executeSettlement(listingId, offerId, encryptedSettlementAmount);
     // return tx.wait();
-    
-    console.warn("Settlement contract bindings need to be added to lib/contracts.ts");
+
+    console.warn(
+      "Settlement contract bindings need to be added to lib/contracts.ts",
+    );
   }
 }

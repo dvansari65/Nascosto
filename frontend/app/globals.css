@@ -5,7 +5,7 @@
   --font-display: var(--font-rajdhani), "Rajdhani", sans-serif;
   --font-body: var(--font-rajdhani), "Rajdhani", sans-serif;
   --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
-  
+
   /* Neutrals — sampled from allium.so (true black text, white bg, warm gray) */
   --color-ink-950: #0a0a0a;
   --color-ink-800: #1a1a1a;
@@ -21,17 +21,17 @@
   --color-signal-500: #2fae92;
   --color-signal-600: #218a74;
 
-   /* Bloom — your second brand accent, currently scattered as raw hex */
-   --color-bloom-100: #f9f3ea;
-   --color-bloom-200: #f1cdea;
-   --color-bloom-300: #e4dae2;
-   --color-bloom-500: #fa93e5;
-   --color-bloom-600: #a99b89;
- 
-   /* Foil — fixes the undefined var(--color-foil-400) reference */
-   --color-foil-300: #f5e6b8;
-   --color-foil-400: #d4af37; /* actual metallic gold, fits "collectible card" foil framing */
-   --color-abyss: #12100e;
+  /* Bloom — your second brand accent, currently scattered as raw hex */
+  --color-bloom-100: #f9f3ea;
+  --color-bloom-200: #f1cdea;
+  --color-bloom-300: #e4dae2;
+  --color-bloom-500: #fa93e5;
+  --color-bloom-600: #a99b89;
+
+  /* Foil — fixes the undefined var(--color-foil-400) reference */
+  --color-foil-300: #f5e6b8;
+  --color-foil-400: #d4af37; /* actual metallic gold, fits "collectible card" foil framing */
+  --color-abyss: #12100e;
 }
 
 :root {
@@ -48,11 +48,8 @@ body {
 @layer utilities {
   /* faint dot/line grid for the reserved illustration panel */
   .grid-pattern {
-    background-image: linear-gradient(
-        to right,
-        var(--color-ink-700) 1px,
-        transparent 1px
-      ),
+    background-image:
+      linear-gradient(to right, var(--color-ink-700) 1px, transparent 1px),
       linear-gradient(to bottom, var(--color-ink-700) 1px, transparent 1px);
     background-size: 32px 32px;
     mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%);
@@ -83,34 +80,32 @@ body {
     color: transparent;
   }
 }
-.sample-color{
+.sample-color {
   background-color: #e4dae2;
 }
-.sample-color-2{
+.sample-color-2 {
   background-color: #f1cdea;
 }
-.sample-color-3{
+.sample-color-3 {
   color: #fa93e5;
 }
-.sample-color-4{
+.sample-color-4 {
   background-color: #f9f3ea;
 }
-.hover-color{
+.hover-color {
   background-color: #a99b89;
 }
-.sample-color-5{
- border-color: #f1cdea;
+.sample-color-5 {
+  border-color: #f1cdea;
 }
 @layer utilities {
   .bg-pink-glow {
     background-image: linear-gradient(
-     to top right,
-     rgba(234, 173, 207, 0.55),
-     transparent 65%
+      to top right,
+      rgba(234, 173, 207, 0.55),
+      transparent 65%
     );
-    
   }
-  
 }
 
 /* Hide scrollbar but keep scrolling */
@@ -124,8 +119,12 @@ body {
 }
 
 @keyframes shine-sweep {
-  0% { transform: translate(-120%, 120%) rotate(25deg); }
-  100% { transform: translate(220%, -220%) rotate(25deg); }
+  0% {
+    transform: translate(-120%, 120%) rotate(25deg);
+  }
+  100% {
+    transform: translate(220%, -220%) rotate(25deg);
+  }
 }
 
 .shine-card::before,
@@ -154,24 +153,33 @@ body {
   opacity: 1;
 }
 
-.text-color-1{
+.text-color-1 {
   color: rgb(54, 54, 55);
 }
 .text-color-2 {
   color: rgb(0, 0, 3);
 }
 
-.button-color-1{
-  background-color: rgb(5, 5, 5);;
+.button-color-1 {
+  background-color: rgb(5, 5, 5);
 }
 
 @keyframes flame-flicker {
-  0%, 100% { transform: scale(1) translateY(0); opacity: 0.5; }
-  50% { transform: scale(1.06) translateY(-2px); opacity: 0.75; }
+  0%,
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.06) translateY(-2px);
+    opacity: 0.75;
+  }
 }
 
 @keyframes holo-spin {
-  to { filter: hue-rotate(360deg); }
+  to {
+    filter: hue-rotate(360deg);
+  }
 }
 
 .card-mat {
@@ -184,18 +192,31 @@ body {
   position: absolute;
   inset: -20%;
   z-index: 0;
-  background: radial-gradient(circle at 50% 60%, var(--glow-color) 0%, transparent 68%);
+  background: radial-gradient(
+    circle at 50% 60%,
+    var(--glow-color) 0%,
+    transparent 68%
+  );
   filter: blur(20px);
   animation: flame-flicker 3s ease-in-out infinite;
   pointer-events: none;
 }
 
 .card-mat--holo::before {
-  background: conic-gradient(from 0deg, #ff5f6d, #f9d423, #22c55e, #3b82f6, #a855f7, #ff5f6d);
-  animation: flame-flicker 3s ease-in-out infinite, holo-spin 5s linear infinite;
+  background: conic-gradient(
+    from 0deg,
+    #ff5f6d,
+    #f9d423,
+    #22c55e,
+    #3b82f6,
+    #a855f7,
+    #ff5f6d
+  );
+  animation:
+    flame-flicker 3s ease-in-out infinite,
+    holo-spin 5s linear infinite;
   opacity: 0.6;
 }
-
 
 .loader {
   height: 15px;
@@ -208,7 +229,9 @@ body {
   content: "";
   grid-area: 1/1;
   --_g: no-repeat radial-gradient(farthest-side, currentColor 94%, #0000);
-  background: var(--_g) left, var(--_g) right;
+  background:
+    var(--_g) left,
+    var(--_g) right;
   background-size: 25% 100%;
 }
 .loader:after {
@@ -217,8 +240,39 @@ body {
   animation-name: l31-1;
 }
 @keyframes l31-0 {
-  100% { transform: translate(37.5%); }
+  100% {
+    transform: translate(37.5%);
+  }
 }
 @keyframes l31-1 {
-  100% { transform: rotate(-0.5turn) translate(37.5%) rotate(0.5turn); }
+  100% {
+    transform: rotate(-0.5turn) translate(37.5%) rotate(0.5turn);
+  }
+}
+
+.ring-loader {
+  width: var(--loader-size, 50px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(farthest-side, var(--loader-color, #ffa516) 94%, #0000)
+      top / var(--loader-thickness, 8px) var(--loader-thickness, 8px) no-repeat,
+    conic-gradient(#0000 30%, var(--loader-color, #ffa516));
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    #0000 calc(100% - var(--loader-thickness, 8px)),
+    #000 0
+  );
+  mask: radial-gradient(
+    farthest-side,
+    #0000 calc(100% - var(--loader-thickness, 8px)),
+    #000 0
+  );
+  animation: ring-loader-spin 1s infinite linear;
+}
+
+@keyframes ring-loader-spin {
+  100% {
+    transform: rotate(1turn);
+  }
 }

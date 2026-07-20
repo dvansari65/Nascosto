@@ -1,6 +1,5 @@
 import { toPreviewSrc } from "./preview";
 
-
 export type CardMetadata = {
   name: string;
   description: string;
@@ -8,18 +7,23 @@ export type CardMetadata = {
   attributes: { trait_type: string; value: string }[];
 };
 
-function getAttribute(metadata: CardMetadata, traitType: string): string | undefined {
+function getAttribute(
+  metadata: CardMetadata,
+  traitType: string,
+): string | undefined {
   return metadata.attributes.find(
-    (a) => a.trait_type.toLowerCase() === traitType.toLowerCase()
+    (a) => a.trait_type.toLowerCase() === traitType.toLowerCase(),
   )?.value;
 }
 
 export const CardMetadataUtil = { getAttribute };
 
-export async function fetchCardMetadata(tokenUri: string): Promise<CardMetadata> {
+export async function fetchCardMetadata(
+  tokenUri: string,
+): Promise<CardMetadata> {
   const url = toPreviewSrc(tokenUri);
-  if(!url){
-    throw new Error("URL not found!")
+  if (!url) {
+    throw new Error("URL not found!");
   }
   const res = await fetch(url);
 

@@ -14,7 +14,8 @@ import { toast } from "sonner";
 export default function DashboardPage() {
   const { isConnected, address, getEthersSigner, connectWallet } = useWallet();
   const { cardForm, updateCardForm, resetCardForm } = useCardForm();
-  const { mutateAsync: uploadImage, isPending: isUploadingImage } = useImageUpload();
+  const { mutateAsync: uploadImage, isPending: isUploadingImage } =
+    useImageUpload();
   const { isMinting, mintCard } = useMintCard({ getEthersSigner, address });
 
   const listMutation = useListCard({ getEthersSigner, address });
@@ -22,16 +23,19 @@ export default function DashboardPage() {
   const [askingPrice, setAskingPrice] = useState("");
 
   const handleListCard = () => {
-    listMutation.mutate({ tokenId: tokenIdToList, price: askingPrice }, {
-      onSuccess: () => {
-        toast.success("Card listed securely!");
-        setTokenIdToList(null);
-        setAskingPrice("");
+    listMutation.mutate(
+      { tokenId: tokenIdToList, price: askingPrice },
+      {
+        onSuccess: () => {
+          toast.success("Card listed securely!");
+          setTokenIdToList(null);
+          setAskingPrice("");
+        },
+        onError: (err: any) => {
+          toast.error(err.message || "Listing failed.");
+        },
       },
-      onError: (err: any) => {
-        toast.error(err.message || "Listing failed.");
-      }
-    });
+    );
   };
 
   const handleImageSelect = async (file?: File) => {
@@ -46,32 +50,37 @@ export default function DashboardPage() {
     try {
       const result = await mintCard(cardForm);
       if (result.success) {
-        toast.success("Card minted successfully!")
+        toast.success("Card minted successfully!");
         if (result.tokenId !== null) {
           setTokenIdToList(result?.tokenId?.toString()); // pre-fill, ready to list immediately
-
         }
       } else if (result.imageRolledBack) {
         updateCardForm("imageUri", "");
       }
     } catch (error: any) {
-      toast.error(error.message)
-      resetCardForm()
+      toast.error(error.message);
+      resetCardForm();
     }
   };
 
   if (!isConnected) {
     return (
       <div className="flex flex-col items-center justify-center p-24 text-center">
-        <h1 className="text-3xl font-display mb-6">Connect to view Dashboard</h1>
-        <Button onClick={connectWallet} shadowColor="#e4dae2">Connect Wallet</Button>
+        <h1 className="text-3xl font-display mb-6">
+          Connect to view Dashboard
+        </h1>
+        <Button onClick={connectWallet} shadowColor="#e4dae2">
+          Connect Wallet
+        </Button>
       </div>
     );
   }
 
   return (
     <div className="mx-auto max-w-350 px-6 lg:px-10 py-12">
-      <h1 className="text-4xl font-bold mb-8 font-display">Collector Dashboard</h1>
+      <h1 className="text-4xl font-bold mb-8 font-display">
+        Collector Dashboard
+      </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <CreateCardPanel
           cardForm={cardForm}

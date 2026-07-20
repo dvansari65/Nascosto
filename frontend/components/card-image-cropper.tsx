@@ -1,7 +1,11 @@
 // components/CardImageCropper.tsx
 "use client";
 
-import { CARD_ASPECT_RATIO, cropAndResizeImage, validateMinResolution } from "@/helpers/cropImage";
+import {
+  CARD_ASPECT_RATIO,
+  cropAndResizeImage,
+  validateMinResolution,
+} from "@/helpers/cropImage";
 import { useCallback, useState } from "react";
 import Cropper, { Area } from "react-easy-crop";
 import { toast } from "sonner";
@@ -31,7 +35,7 @@ export function CardImageCropper({ file, onConfirm, onCancel }: Props) {
       const result = await cropAndResizeImage(imageSrc, croppedAreaPixels);
       onConfirm(result);
     } catch (e: any) {
-        console.log("error:",e)
+      console.log("error:", e);
       toast.error(e?.message || "Could not process image");
     } finally {
       setProcessing(false);
@@ -63,7 +67,11 @@ export function CardImageCropper({ file, onConfirm, onCancel }: Props) {
           onChange={(e) => setZoom(Number(e.target.value))}
           className="flex-1"
         />
-        <button onClick={onCancel} disabled={processing} className="px-4 py-2 text-sm text-white/70">
+        <button
+          onClick={onCancel}
+          disabled={processing}
+          className="px-4 py-2 text-sm text-white/70"
+        >
           Cancel
         </button>
         <button

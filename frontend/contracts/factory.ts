@@ -6,10 +6,6 @@ interface GetContractParams {
   runner: ContractRunner;
 }
 
-export function getContract({
-  address,
-  abi,
-  runner,
-}: GetContractParams) {
+export function getContract({ address, abi, runner }: GetContractParams) {
   return new Contract(address, abi, runner);
 }

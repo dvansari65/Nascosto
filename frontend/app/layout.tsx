@@ -32,7 +32,6 @@ export default function RootLayout({
       lang="en"
       className={`${rajdhani.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-
       <body className="min-h-full flex flex-col bg-paper ">
         <AppProvider>
           <Navbar />

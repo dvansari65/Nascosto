@@ -15,11 +15,10 @@ export const avalancheFuji = defineChain({
   testnet: true,
 });
 
-
 export const wagmiConfig = createConfig({
   chains: [avalancheFuji],
   connectors: [injected()],
   transports: {
-    [avalancheFuji.id]: http()
+    [avalancheFuji.id]: http(),
   },
 });

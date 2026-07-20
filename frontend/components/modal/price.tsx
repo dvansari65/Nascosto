@@ -12,12 +12,16 @@ import { gsap } from "gsap";
  * - onClose: () => void — called on backdrop click, Escape, or the close button
  */
 
-interface  OfferPriceModalProps {
-    isOpen:boolean,
-    price:string,
-    onClose:()=>void
+interface OfferPriceModalProps {
+  isOpen: boolean;
+  price: string;
+  onClose: () => void;
 }
-export default function OfferPriceModal({ isOpen, price, onClose }:OfferPriceModalProps) {
+export default function OfferPriceModal({
+  isOpen,
+  price,
+  onClose,
+}: OfferPriceModalProps) {
   const backdropRef = useRef(null);
   const cardRef = useRef(null);
 
@@ -34,18 +38,18 @@ export default function OfferPriceModal({ isOpen, price, onClose }:OfferPriceMod
       .fromTo(
         backdrop,
         { opacity: 0 },
-        { opacity: 1, duration: 0.25, ease: "power2.out" }
+        { opacity: 1, duration: 0.25, ease: "power2.out" },
       )
       .fromTo(
         card,
         { opacity: 0, y: 16, scale: 0.96 },
         { opacity: 1, y: 0, scale: 1, duration: 0.35, ease: "back.out(1.6)" },
-        "-=0.15"
+        "-=0.15",
       );
 
     // Escape to close
     const handleKey = (e: KeyboardEvent) => {
-        if (e.key === "Escape") onClose();
+      if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleKey);
 

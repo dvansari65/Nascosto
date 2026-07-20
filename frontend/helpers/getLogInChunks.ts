@@ -6,7 +6,7 @@ export async function getLogsInChunks(
   contract: ethers.Contract,
   filter: ethers.DeferredTopicFilter,
   fromBlock: number,
-  provider: ethers.Provider
+  provider: ethers.Provider,
 ): Promise<ethers.EventLog[]> {
   const latestBlock = await provider.getBlockNumber();
   const allEvents: ethers.EventLog[] = [];

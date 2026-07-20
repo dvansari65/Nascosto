@@ -8,7 +8,14 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { TickStrip } from "./tick-strip";
 // Replace these with your actual 5 card-art export names from "./card-art"
-import { Card1Art, Card2Art, Card3Art, Card4Art, Card5Art,Card6Art } from "./card-art";
+import {
+  Card1Art,
+  Card2Art,
+  Card3Art,
+  Card4Art,
+  Card5Art,
+  Card6Art,
+} from "./card-art";
 import { ButtonLink } from "./link";
 
 type HeroCard = {
@@ -61,17 +68,35 @@ export function Hero() {
 
   useGSAP(
     () => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" }, delay: 0.15 });
+      const tl = gsap.timeline({
+        defaults: { ease: "power3.out" },
+        delay: 0.15,
+      });
 
       tl.from(".hero-chip", { y: 16, opacity: 0, duration: 0.6 })
-        .from(".hero-line", { y: "110%", opacity: 0, duration: 0.85, stagger: 0.1 }, "-=0.35")
+        .from(
+          ".hero-line",
+          { y: "110%", opacity: 0, duration: 0.85, stagger: 0.1 },
+          "-=0.35",
+        )
         .from(".hero-sub", { y: 18, opacity: 0, duration: 0.7 }, "-=0.5")
-        .from(".hero-cta", { y: 14, opacity: 0, duration: 0.6, stagger: 0.08 }, "-=0.45")
-        .from(".hero-stat", { y: 12, opacity: 0, duration: 0.5, stagger: 0.08 }, "-=0.4")
-        .from(".hero-panel", { opacity: 0, scale: 0.97, duration: 0.9, ease: "power2.out" }, "-=0.9")
-
+        .from(
+          ".hero-cta",
+          { y: 14, opacity: 0, duration: 0.6, stagger: 0.08 },
+          "-=0.45",
+        )
+        .from(
+          ".hero-stat",
+          { y: 12, opacity: 0, duration: 0.5, stagger: 0.08 },
+          "-=0.4",
+        )
+        .from(
+          ".hero-panel",
+          { opacity: 0, scale: 0.97, duration: 0.9, ease: "power2.out" },
+          "-=0.9",
+        );
     },
-    { scope: containerRef }
+    { scope: containerRef },
   );
 
   return (
@@ -79,8 +104,18 @@ export function Hero() {
       ref={containerRef}
       className=" relative  overflow-hidden border-y border-dashed border-neutral-300 bg-white "
     >
-      <TickStrip align="left" className="sample-color-4" cells={300} cellSize={5} />
-      <TickStrip className="sample-color-4" align="right" cells={300} cellSize={5} />
+      <TickStrip
+        align="left"
+        className="sample-color-4"
+        cells={300}
+        cellSize={5}
+      />
+      <TickStrip
+        className="sample-color-4"
+        align="right"
+        cells={300}
+        cellSize={5}
+      />
 
       <div className="mx-auto grid max-w-350 grid-cols-1 lg:grid-cols-2 lg:px-12">
         {/* Left — reserved for illustration, built separately */}
@@ -119,7 +154,9 @@ export function Hero() {
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-3">
-            <ButtonLink className="text-black text-xl" href="#market">Enter the MarketPlace</ButtonLink>
+            <ButtonLink className="text-black text-xl" href="#market">
+              Enter the MarketPlace
+            </ButtonLink>
           </div>
         </div>
       </div>

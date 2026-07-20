@@ -1,4 +1,4 @@
-import ShadowCardArtifact from "../lib/abis/ShadowCard.json"
+import ShadowCardArtifact from "../lib/abis/ShadowCard.json";
 import MarketplaceArtifact from "../lib/abis/ShadowCardsMarketplace.json";
 import SettlementArtifact from "../lib/abis/ConfidentialSettlement.json";
 

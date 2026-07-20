@@ -30,8 +30,7 @@ function CopyTokenId({ tokenId }: { tokenId: string }) {
 export default function MyCardsPage() {
   const { isConnected, address, getEthersSigner, connectWallet } = useWallet();
   const [readProvider, setReadProvider] = useState<ethers.Signer | null>(null);
-  const {data:tokensIds, isPending} = getMyTokens(address?.toString())
- 
+  const { data: tokensIds, isPending } = getMyTokens(address?.toString());
 
   useEffect(() => {
     if (!isConnected) return;
@@ -41,7 +40,9 @@ export default function MyCardsPage() {
   if (!isConnected) {
     return (
       <div className="flex flex-col items-center justify-center p-24 text-center">
-        <h1 className="text-3xl font-display mb-6">Connect to view your cards</h1>
+        <h1 className="text-3xl font-display mb-6">
+          Connect to view your cards
+        </h1>
         <Button onClick={connectWallet} shadowColor="#e4dae2">
           Connect Wallet
         </Button>
@@ -53,8 +54,8 @@ export default function MyCardsPage() {
     <div className="mx-auto max-w-350 px-6 lg:px-10 py-12">
       <h1 className="text-4xl font-bold mb-4 font-display">My Cards</h1>
       <p className="text-neutral-600 mb-10 max-w-2xl text-lg">
-        Every card you've minted, synced live from the indexer. Copy a Token ID to
-        use it on the List a Card panel.
+        Every card you've minted, synced live from the indexer. Copy a Token ID
+        to use it on the List a Card panel.
       </p>
 
       {isPending ? (
@@ -76,7 +77,7 @@ export default function MyCardsPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tokensIds?.map((card:any) => {
+          {tokensIds?.map((card: any) => {
             const tokenIdStr = card.tokenId.toString();
             return (
               <div

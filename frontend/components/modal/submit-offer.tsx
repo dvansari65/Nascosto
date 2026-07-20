@@ -13,7 +13,12 @@ type OfferModalProps = {
   isSubmitting: boolean;
 };
 
-export function OfferModal({ tokenId, onClose, onSubmit, isSubmitting }: OfferModalProps) {
+export function OfferModal({
+  tokenId,
+  onClose,
+  onSubmit,
+  isSubmitting,
+}: OfferModalProps) {
   const [amount, setAmount] = useState("");
   const [error, setError] = useState("");
 
@@ -26,7 +31,7 @@ export function OfferModal({ tokenId, onClose, onSubmit, isSubmitting }: OfferMo
       backgroundColor: "rgba(0,0,0,0)",
       backdropFilter: "blur(0px)",
       duration: 0.4,
-      ease: "power2.out"
+      ease: "power2.out",
     });
 
     // Modal slide and scale in
@@ -36,7 +41,7 @@ export function OfferModal({ tokenId, onClose, onSubmit, isSubmitting }: OfferMo
       opacity: 0,
       duration: 0.5,
       ease: "back.out(1.2)",
-      delay: 0.05
+      delay: 0.05,
     });
   }, []);
 
@@ -65,14 +70,20 @@ export function OfferModal({ tokenId, onClose, onSubmit, isSubmitting }: OfferMo
           <h3 className="text-xl font-bold font-display tracking-tight text-neutral-900">
             Make an Offer
           </h3>
-          <button onClick={onClose} className="flex size-7 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 hover:text-black">
+          <button
+            onClick={onClose}
+            className="flex size-7 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 hover:text-black"
+          >
             <X size={16} strokeWidth={2.5} />
           </button>
         </div>
 
         <p className="text-sm text-neutral-500 mb-6 leading-relaxed">
-          You are making an offer on <span className="font-mono text-neutral-900 font-medium bg-neutral-100 px-1 py-0.5 rounded">Token #{tokenId}</span>. 
-          Your offer amount is strictly encrypted on-chain before submission.
+          You are making an offer on{" "}
+          <span className="font-mono text-neutral-900 font-medium bg-neutral-100 px-1 py-0.5 rounded">
+            Token #{tokenId}
+          </span>
+          . Your offer amount is strictly encrypted on-chain before submission.
         </p>
 
         <div className="space-y-2 mb-6">
@@ -97,7 +108,9 @@ export function OfferModal({ tokenId, onClose, onSubmit, isSubmitting }: OfferMo
               <span className="text-sm font-medium text-neutral-400">AVAX</span>
             </div>
           </div>
-          {error && <p className="text-sm text-red-500 font-medium px-1">{error}</p>}
+          {error && (
+            <p className="text-sm text-red-500 font-medium px-1">{error}</p>
+          )}
         </div>
 
         <SimpleButton
@@ -106,7 +119,9 @@ export function OfferModal({ tokenId, onClose, onSubmit, isSubmitting }: OfferMo
           className="w-full justify-center text-[15px] py-2.5 font-medium text-white shadow-sm transition-all hover:bg-neutral-800 bg-neutral-900"
           onClick={handleSubmit}
         >
-          {isSubmitting ? "Encrypting & Submitting..." : "Submit Encrypted Offer"}
+          {isSubmitting
+            ? "Encrypting & Submitting..."
+            : "Submit Encrypted Offer"}
         </SimpleButton>
       </div>
     </div>

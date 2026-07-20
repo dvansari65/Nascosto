@@ -12,17 +12,15 @@ export type ListingWithMetadata = {
   metadataError: string | null;
 };
 
-export function useListingsWithMetadata(
-  listings: Listing[]
-) {
+export function useListingsWithMetadata(listings: Listing[]) {
   const [items, setItems] = useState<ListingWithMetadata[]>([]);
 
   // Stable string to prevent infinite loops if the parent passes new array references (like listings || [])
-  const listingsKey = listings.map(l => l.tokenId.toString()).join(",");
+  const listingsKey = listings.map((l) => l.tokenId.toString()).join(",");
 
   useEffect(() => {
     if (listings.length === 0) {
-      setItems((prev) => prev.length === 0 ? prev : []);
+      setItems((prev) => (prev.length === 0 ? prev : []));
       return;
     }
 
@@ -36,25 +34,36 @@ export function useListingsWithMetadata(
         metadata: null,
         metadataLoading: true,
         metadataError: null,
-      }))
+      })),
     );
 
     listings.forEach(async (listing, index) => {
       try {
         const provider = getPublicProvider();
-        const tokenUri = await ShadowCardService.getTokenURI(provider, listing.tokenId);
+        const tokenUri = await ShadowCardService.getTokenURI(
+          provider,
+          listing.tokenId,
+        );
         const metadata = await fetchCardMetadata(tokenUri);
         if (cancelled) return;
         setItems((current) => {
           const next = [...current];
-          next[index] = { listing, metadata, metadataLoading: false, metadataError: null };
+          next[index] = {
+            listing,
+            metadata,
+            metadataLoading: false,
+            metadataError: null,
+          };
           return next;
         });
       } catch (e: any) {
         if (cancelled) return;
 
-        console.error(`Failed to load metadata for token ${listing.tokenId}:`, e);
-        
+        console.error(
+          `Failed to load metadata for token ${listing.tokenId}:`,
+          e,
+        );
+
         setItems((current) => {
           const next = [...current];
           next[index] = {
@@ -73,6 +82,6 @@ export function useListingsWithMetadata(
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listingsKey]);
-
+  console.log("items:", items);
   return items;
 }

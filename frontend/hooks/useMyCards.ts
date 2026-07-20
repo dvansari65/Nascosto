@@ -11,7 +11,7 @@ export type MyCard = {
 
 async function fetchMyCards(
   address: string,
-  providerOrSigner: ethers.Signer | ethers.Provider
+  providerOrSigner: ethers.Signer | ethers.Provider,
 ): Promise<MyCard[]> {
   const contract = getShadowCardContract(providerOrSigner);
   if (!contract) {
@@ -24,18 +24,23 @@ async function fetchMyCards(
       : (providerOrSigner as ethers.Provider);
 
   const filter = contract.filters.CardMinted(null, address);
-  const events = await getLogsInChunks(contract, filter, DEPLOYMENT_BLOCK, provider);
+  const events = await getLogsInChunks(
+    contract,
+    filter,
+    DEPLOYMENT_BLOCK,
+    provider,
+  );
   const data = events.map((e: any) => ({
     tokenId: e.args.tokenId as bigint,
     contentHash: e.args.contentHash as string,
   }));
-  console.log("my cards:",data)
-  return data 
+  console.log("my cards:", data);
+  return data;
 }
 
 export function useMyCards(
   address: string | null | undefined,
-  providerOrSigner: ethers.Signer | ethers.Provider | null
+  providerOrSigner: ethers.Signer | ethers.Provider | null,
 ) {
   const { data, isLoading, error } = useQuery({
     queryKey: ["myCards", address],

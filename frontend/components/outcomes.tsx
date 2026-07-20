@@ -55,7 +55,7 @@ export function Outcomes() {
         },
       });
     },
-    { scope: containerRef }
+    { scope: containerRef },
   );
 
   return (
@@ -74,7 +74,13 @@ export function Outcomes() {
         </div>
 
         <div className="outcome-grid relative border border-t-transparent  border-neutral-200 pt-12">
-          <TickStrip align="top" className="w-full text-gray-300" cells={150} cellSize={6} width={48} />
+          <TickStrip
+            align="top"
+            className="w-full text-gray-300"
+            cells={150}
+            cellSize={6}
+            width={48}
+          />
 
           <dl className="grid grid-cols-1 divide-y divide-neutral-200 border-t border-neutral-200 lg:grid-cols-3 lg:divide-x lg:divide-y-0">
             {OUTCOMES.map((item) => (

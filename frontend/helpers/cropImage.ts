@@ -1,9 +1,9 @@
 // lib/image/cropImage.ts
 
 export const CARD_ASPECT_RATIO = 5 / 7; // width / height — locked ratio for all card art
-export const CARD_TARGET_WIDTH = 1050;  // px, master resolution (5:7 at ~150dpi)
+export const CARD_TARGET_WIDTH = 1050; // px, master resolution (5:7 at ~150dpi)
 export const CARD_TARGET_HEIGHT = 1470;
-export const CARD_THUMB_WIDTH = 300;    // for marketplace grid/listing views
+export const CARD_THUMB_WIDTH = 300; // for marketplace grid/listing views
 export const CARD_THUMB_HEIGHT = 420;
 
 export type PixelCrop = { x: number; y: number; width: number; height: number };
@@ -18,12 +18,17 @@ function loadImage(src: string): Promise<HTMLImageElement> {
   });
 }
 
-async function canvasToBlob(canvas: HTMLCanvasElement, type: string, quality: number): Promise<Blob> {
+async function canvasToBlob(
+  canvas: HTMLCanvasElement,
+  type: string,
+  quality: number,
+): Promise<Blob> {
   return new Promise((resolve, reject) => {
     canvas.toBlob(
-      (blob) => (blob ? resolve(blob) : reject(new Error("Canvas export failed"))),
+      (blob) =>
+        blob ? resolve(blob) : reject(new Error("Canvas export failed")),
       type,
-      quality
+      quality,
     );
   });
 }
@@ -37,7 +42,7 @@ export async function cropAndResizeImage(
   imageSrc: string,
   pixelCrop: PixelCrop,
   outputWidth = CARD_TARGET_WIDTH,
-  outputHeight = CARD_TARGET_HEIGHT
+  outputHeight = CARD_TARGET_HEIGHT,
 ): Promise<File> {
   const image = await loadImage(imageSrc);
 
@@ -60,7 +65,7 @@ export async function cropAndResizeImage(
     0,
     0,
     outputWidth,
-    outputHeight
+    outputHeight,
   );
 
   const blob = await canvasToBlob(canvas, "image/webp", 0.9);
@@ -68,19 +73,31 @@ export async function cropAndResizeImage(
 }
 
 /** Generates a lightweight thumbnail from the same crop for grid/listing views. */
-export async function generateThumbnail(imageSrc: string, pixelCrop: PixelCrop): Promise<File> {
-  const blob = await cropAndResizeImage(imageSrc, pixelCrop, CARD_THUMB_WIDTH, CARD_THUMB_HEIGHT);
+export async function generateThumbnail(
+  imageSrc: string,
+  pixelCrop: PixelCrop,
+): Promise<File> {
+  const blob = await cropAndResizeImage(
+    imageSrc,
+    pixelCrop,
+    CARD_THUMB_WIDTH,
+    CARD_THUMB_HEIGHT,
+  );
   return new File([blob], "card-thumb.webp", { type: "image/webp" });
 }
 
 /** Rejects source images that are too small to safely crop to card resolution without upscaling blur. */
-export async function validateMinResolution(file: File, minWidth = 100, minHeight = 100) {
+export async function validateMinResolution(
+  file: File,
+  minWidth = 100,
+  minHeight = 100,
+) {
   const url = URL.createObjectURL(file);
   try {
     const img = await loadImage(url);
     if (img.width < minWidth || img.height < minHeight) {
       throw new Error(
-        `Image too small (${img.width}×${img.height}). Minimum is ${minWidth}×${minHeight} for sharp card art.`
+        `Image too small (${img.width}×${img.height}). Minimum is ${minWidth}×${minHeight} for sharp card art.`,
       );
     }
   } finally {

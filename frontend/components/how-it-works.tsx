@@ -1,6 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import { Button } from "./button";
-import { TickStrip } from "./tick-strip"
+import { TickStrip } from "./tick-strip";
 
 export const HOW_IT_WORKS = [
   {
@@ -89,13 +89,13 @@ export const HowItWorks = () => {
                 justify-between
                 items-start
                 px-4 pb-3
-                ${index !== HOW_IT_WORKS.length - 1
-                        ? "border-r sample-color-5"
-                        : ""
-                      }
+                ${
+                  index !== HOW_IT_WORKS.length - 1
+                    ? "border-r sample-color-5"
+                    : ""
+                }
               `}
                   >
-
                     <div>
                       <h3
                         className="
@@ -125,7 +125,11 @@ export const HowItWorks = () => {
                     </div>
 
                     {/* Bottom */}
-                    <Button className="flex justify-center items-center" width={36} height={30}  >
+                    <Button
+                      className="flex justify-center items-center"
+                      width={36}
+                      height={30}
+                    >
                       <ChevronRight size={40} />
                     </Button>
                   </div>
@@ -136,5 +140,5 @@ export const HowItWorks = () => {
         </div>
       </section>
     </>
-  )
-}
+  );
+};

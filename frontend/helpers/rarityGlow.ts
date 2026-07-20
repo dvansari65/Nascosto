@@ -10,7 +10,10 @@ const RARITY_GLOW: Record<string, string> = {
   mythic: "#ec4899",
 };
 
-export function getRarityGlow(metadata: CardMetadata | null): { color: string; isHolo: boolean } {
+export function getRarityGlow(metadata: CardMetadata | null): {
+  color: string;
+  isHolo: boolean;
+} {
   const rarity = (getTrait(metadata, "rarity") || "").toLowerCase();
   if (rarity === "one of one") return { color: "", isHolo: true };
   return { color: RARITY_GLOW[rarity] ?? RARITY_GLOW.common, isHolo: false };

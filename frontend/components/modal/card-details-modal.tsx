@@ -14,9 +14,9 @@ type CardDetailsModalProps = {
   metadata: CardMetadata | null;
   onClose: () => void;
   onMakeOffer: (tokenId: bigint) => void;
-  isMakingOffer: boolean,
-  isDelisting: boolean
-  deList: (tokenId: bigint | string) => void
+  isMakingOffer: boolean;
+  isDelisting: boolean;
+  deList: (tokenId: bigint | string) => void;
 };
 
 export function CardDetailsModal({
@@ -26,11 +26,17 @@ export function CardDetailsModal({
   onMakeOffer,
   deList,
   isDelisting,
-  isMakingOffer
+  isMakingOffer,
 }: CardDetailsModalProps) {
-  const rarity = metadata ? CardMetadataUtil.getAttribute(metadata, "Rarity") : undefined;
-  const element = metadata ? CardMetadataUtil.getAttribute(metadata, "Element") : undefined;
-  const cardClass = metadata ? CardMetadataUtil.getAttribute(metadata, "Class") : undefined;
+  const rarity = metadata
+    ? CardMetadataUtil.getAttribute(metadata, "Rarity")
+    : undefined;
+  const element = metadata
+    ? CardMetadataUtil.getAttribute(metadata, "Element")
+    : undefined;
+  const cardClass = metadata
+    ? CardMetadataUtil.getAttribute(metadata, "Class")
+    : undefined;
 
   const overlayRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -41,7 +47,7 @@ export function CardDetailsModal({
       backgroundColor: "rgba(0,0,0,0)",
       backdropFilter: "blur(0px)",
       duration: 0.4,
-      ease: "power2.out"
+      ease: "power2.out",
     });
 
     // Modal slide and scale in
@@ -51,7 +57,7 @@ export function CardDetailsModal({
       opacity: 0,
       duration: 0.5,
       ease: "back.out(1.2)",
-      delay: 0.05
+      delay: 0.05,
     });
   }, []);
 
@@ -70,16 +76,31 @@ export function CardDetailsModal({
           <h3 className="text-xl font-bold font-display tracking-tight text-neutral-900 truncate pr-4">
             {metadata?.name ?? `Token #${listing.tokenId.toString()}`}
           </h3>
-          <button onClick={onClose} className="flex size-7 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 hover:text-black">
+          <button
+            onClick={onClose}
+            className="flex size-7 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 hover:text-black"
+          >
             <X size={16} strokeWidth={2.5} />
           </button>
         </div>
 
         {(rarity || element || cardClass) && (
           <div className="flex flex-wrap gap-2 mb-6">
-            {rarity && <span className="text-[11px] font-medium tracking-wide uppercase bg-neutral-100 text-neutral-600 px-2.5 py-1 rounded-md border border-neutral-200">{rarity}</span>}
-            {element && <span className="text-[11px] font-medium tracking-wide uppercase bg-neutral-100 text-neutral-600 px-2.5 py-1 rounded-md border border-neutral-200">{element}</span>}
-            {cardClass && <span className="text-[11px] font-medium tracking-wide uppercase bg-neutral-100 text-neutral-600 px-2.5 py-1 rounded-md border border-neutral-200">{cardClass}</span>}
+            {rarity && (
+              <span className="text-[11px] font-medium tracking-wide uppercase bg-neutral-100 text-neutral-600 px-2.5 py-1 rounded-md border border-neutral-200">
+                {rarity}
+              </span>
+            )}
+            {element && (
+              <span className="text-[11px] font-medium tracking-wide uppercase bg-neutral-100 text-neutral-600 px-2.5 py-1 rounded-md border border-neutral-200">
+                {element}
+              </span>
+            )}
+            {cardClass && (
+              <span className="text-[11px] font-medium tracking-wide uppercase bg-neutral-100 text-neutral-600 px-2.5 py-1 rounded-md border border-neutral-200">
+                {cardClass}
+              </span>
+            )}
           </div>
         )}
 
@@ -104,7 +125,7 @@ export function CardDetailsModal({
             disabled={isMakingOffer || isDelisting}
             className="w-full justify-center rounded-md py-2 text-sm font-medium text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-900 disabled:opacity-50"
             onClick={() => {
-              deList(listing.tokenId)
+              deList(listing.tokenId);
               onClose();
             }}
           >

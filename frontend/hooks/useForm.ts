@@ -14,12 +14,11 @@ export const INITIAL_CARD_FORM: CardForm = {
 };
 
 export function useCardForm() {
-  const [cardForm, setCardForm] =
-    useState<CardForm>(INITIAL_CARD_FORM);
+  const [cardForm, setCardForm] = useState<CardForm>(INITIAL_CARD_FORM);
 
   const updateCardForm = <K extends keyof CardForm>(
     field: K,
-    value: CardForm[K]
+    value: CardForm[K],
   ) => {
     setCardForm((current) => ({
       ...current,
