@@ -17,3 +17,13 @@ export const subscribe = async(email:string | null)=>{
         throw error
     }
 }
+
+
+export const totalSubscribed = async ()=>{
+    try {
+        const count = await prisma.subscribe.count();
+        return count;
+    } catch (error) {
+        throw error
+    }
+}
