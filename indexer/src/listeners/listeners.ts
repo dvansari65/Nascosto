@@ -1,6 +1,10 @@
 import { ethers } from "ethers";
 import prisma from "../../lib/prisma";
-import { getMarketplaceContract, getPublicProvider, getShadowCardContract } from "../contracts";
+import {
+  getMarketplaceContract,
+  getPublicProvider,
+  getShadowCardContract,
+} from "../contracts";
 import { fetchPinataMetadata, toPreviewSrc } from "../helpers/preview";
 
 export async function startIndexer(io: any) {
@@ -17,32 +21,34 @@ export async function startIndexer(io: any) {
     return;
   }
 
-
   // Listen to CardListed
-  marketplace.on("CardListed", async (nftContract, tokenId, seller, encryptedPriceHandle, event) => {
-    try {
-      console.log(`CardListed: ${tokenId} by ${seller}`);
-      const tId = Number(tokenId);
-      // Upsert Listing
-      const listing = await prisma.listing.upsert({
-        where: { tokenId: tId },
-        update: {
-          seller,
-          encryptedPriceHandle,
-          status: "Listed"
-        },
-        create: {
-          tokenId: tId,
-          seller,
-          encryptedPriceHandle,
-          status: "Listed"
-        }
-      });
-      io.emit("CardListed", listing);
-    } catch (e) {
-      console.error("Error processing CardListed:", e);
-    }
-  });
+  marketplace.on(
+    "CardListed",
+    async (nftContract, tokenId, seller, encryptedPriceHandle, event) => {
+      try {
+        console.log(`CardListed: ${tokenId} by ${seller}`);
+        const tId = Number(tokenId);
+        // Upsert Listing
+        const listing = await prisma.listing.upsert({
+          where: { tokenId: tId },
+          update: {
+            seller,
+            encryptedPriceHandle,
+            status: "Listed",
+          },
+          create: {
+            tokenId: tId,
+            seller,
+            encryptedPriceHandle,
+            status: "Listed",
+          },
+        });
+        io.emit("CardListed", listing);
+      } catch (e) {
+        console.error("Error processing CardListed:", e);
+      }
+    },
+  );
 
   // Listen to CardDelisted
   marketplace.on("CardDelisted", async (nftContract, tokenId, event) => {
@@ -52,7 +58,7 @@ export async function startIndexer(io: any) {
 
       const listing = await prisma.listing.updateMany({
         where: { tokenId: tId },
-        data: { status: "Delisted" }
+        data: { status: "Delisted" },
       });
 
       io.emit("CardDelisted", listing);
@@ -62,62 +68,75 @@ export async function startIndexer(io: any) {
   });
 
   // Listen to OfferSubmitted
-  marketplace.on("OfferSubmitted", async (nftContract, tokenId, buyer, seller, encryptedAmountHandle, event) => {
-    try {
-      const tId = Number(tokenId);
+  marketplace.on(
+    "OfferSubmitted",
+    async (
+      nftContract,
+      tokenId,
+      buyer,
+      seller,
+      encryptedAmountHandle,
+      event,
+    ) => {
+      try {
+        const tId = Number(tokenId);
 
-      const offer = await prisma.offer.upsert({
-        where: {
-          tokenId_buyer: {
+        const offer = await prisma.offer.upsert({
+          where: {
+            tokenId_buyer: {
+              tokenId: tId,
+              buyer: buyer,
+            },
+          },
+          update: {
+            encryptedAmountHandle,
+            status: "Pending",
+            seller,
+          },
+          create: {
             tokenId: tId,
-            buyer: buyer
-          }
-        },
-        update: {
-          encryptedAmountHandle,
-          status: "Pending",
-          seller,
-        },
-        create: {
-          tokenId: tId,
-          buyer,
-          encryptedAmountHandle,
-          status: "Pending",
-          seller: seller,
-          encryptedForSeller: ""
-        }
-      });
+            buyer,
+            encryptedAmountHandle,
+            status: "Pending",
+            seller: seller,
+            encryptedForSeller: "",
+          },
+        });
 
-      io.emit("OfferSubmitted", offer);
-    } catch (e) {
-      console.error("Error processing OfferSubmitted:", e);
-    }
-  });
+        io.emit("OfferSubmitted", offer);
+      } catch (e) {
+        console.error("Error processing OfferSubmitted:", e);
+      }
+    },
+  );
 
   // Listen to OfferAccepted
-  marketplace.on("OfferAccepted", async (nftContract, tokenId, buyer, event) => {
-    try {
-      console.log(`OfferAccepted: ${tokenId} to ${buyer}`);
-      const tId = Number(tokenId);
+  marketplace.on(
+    "OfferAccepted",
+    async (nftContract, tokenId, buyer, event) => {
+      try {
+        console.log(`OfferAccepted: ${tokenId} to ${buyer}`);
+        const tId = Number(tokenId);
 
-      const listing = await prisma.listing.updateMany({
-        where: { tokenId: tId },
-        data: { status: "Sold" }
-      });
+        const listing = await prisma.listing.updateMany({
+          where: { tokenId: tId },
+          data: { status: "Sold" },
+        });
 
-      const offer = await prisma.offer.updateMany({
-        where: {
-          tokenId: tId,
-          buyer: buyer
-        },
-        data: { status: "Accepted" }
-      });
+        const offer = await prisma.offer.updateMany({
+          where: {
+            tokenId: tId,
+            buyer: buyer,
+          },
+          data: { status: "Accepted" },
+        });
 
-      io.emit("OfferAccepted", { listing, offer });
-    } catch (e) {
-      console.error("Error processing OfferAccepted:", e);
-    }
-  });
+        io.emit("OfferAccepted", { listing, offer });
+      } catch (e) {
+        console.error("Error processing OfferAccepted:", e);
+      }
+    },
+  );
 
   // Listen to CardMinted — creates the Card row with full metadata
   shadowCard.on("CardMinted", async (tokenId, mintedBy, contentHash, event) => {
@@ -130,13 +149,13 @@ export async function startIndexer(io: any) {
       // Real owner isn't in this event — mintedBy is whoever called mintCard,
       // not the recipient. _safeMint already ran before this event fires,
       // so ownerOf() is reliable here.
-      const owner = await (shadowCard).ownerOf(tokenId);
-      console.log("owner of the minted card:", owner)
+      const owner = await shadowCard.ownerOf(tokenId);
+      console.log("owner of the minted card:", owner);
       const metadata = await fetchPinataMetadata(tokenURI);
 
       if (!metadata) {
-        console.log("Metadata not found!!!")
-        return
+        console.log("Metadata not found!!!");
+        return;
       }
 
       const card = await prisma.card.create({
@@ -147,10 +166,18 @@ export async function startIndexer(io: any) {
           name: metadata?.name || null,
           description: metadata?.description || null,
           image: metadata?.image ? toPreviewSrc(metadata.image) : null,
-          sport: metadata?.attributes?.find((a: any) => a.trait_type === "sport")?.value || null,
-          rarity: metadata?.attributes?.find((a: any) => a.trait_type === "rarity")?.value || null,
-          series: metadata?.attributes?.find((a: any) => a.trait_type === "series")?.value || null,
-          edition: metadata?.attributes?.find((a: any) => a.trait_type === "edition")?.value || null,
+          sport:
+            metadata?.attributes?.find((a: any) => a.trait_type === "sport")
+              ?.value || null,
+          rarity:
+            metadata?.attributes?.find((a: any) => a.trait_type === "rarity")
+              ?.value || null,
+          series:
+            metadata?.attributes?.find((a: any) => a.trait_type === "series")
+              ?.value || null,
+          edition:
+            metadata?.attributes?.find((a: any) => a.trait_type === "edition")
+              ?.value || null,
         },
       });
       io.emit("CardMinted", card);
@@ -161,13 +188,14 @@ export async function startIndexer(io: any) {
       // providers can redeliver the same event on reconnect — this makes
       // that specific case a harmless no-op instead of an unhandled crash.
       if (e.code === "P2002") {
-        console.warn(`Card ${tId} already exists — duplicate event delivery, skipping.`);
+        console.warn(
+          `Card ${tId} already exists — duplicate event delivery, skipping.`,
+        );
         return;
       }
       console.error("Error processing CardMinted:", e);
     }
   });
-
 
   // Transfer now only handles ownership changes AFTER mint — mint creation
   // is fully owned by the CardMinted handler above, avoiding two listeners
