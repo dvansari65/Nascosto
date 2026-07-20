@@ -1,8 +1,9 @@
 import prisma from "../../lib/prisma"
+import { EncryptPriceForSellerInputs } from "../../types/offer"
 
 export const getMyOffers = async(publicKey:string)=>{
     try {
-      console.log("Get my offers triggered!")
+      // TODO: add pagintion
         const offers = await prisma.offer.findMany({
             where: {
               seller: publicKey.toString()
@@ -10,8 +11,10 @@ export const getMyOffers = async(publicKey:string)=>{
             select: {
               tokenId: true,
               buyer: true,
-              encryptedAmountHandle: true,
+              encryptedForSeller: true,
+              encryptedAmountHandle:true,
               status: true,
+              seller:true,
               card: {
                 select: {
                   image: true,
@@ -20,8 +23,43 @@ export const getMyOffers = async(publicKey:string)=>{
               }
             }
           })
+          console.log("offers:",offers)
           return offers
     } catch (error) {
         throw error
     }
+}
+
+
+export const addEncryptedPriceForSeller = async ({
+  encryptedPrice,
+  tokenId,
+  buyer
+}:EncryptPriceForSellerInputs)=>{
+  try {
+    if(!encryptedPrice || !tokenId || !buyer){
+      throw new Error("Provide encrypted seller price")
+    }
+    const result = await prisma.offer.upsert({
+      where:{
+        tokenId_buyer:{
+          tokenId,
+          buyer
+        }
+      },
+      update: {
+        encryptedForSeller:encryptedPrice,
+      },
+      create: {
+        tokenId: Number(tokenId),
+        buyer,
+        seller: "",              // placeholder, filled by event listener when it arrives
+        encryptedAmountHandle: "", // placeholder, filled by event listener when it arrives
+        encryptedForSeller:encryptedPrice,
+        status: "Pending",
+      },
+    })
+  } catch (error) {
+    
+  }
 }
