@@ -122,7 +122,7 @@ export function Footer() {
                   {countLoading ? (
                     <RingLoader size={15} />
                   ) : (
-                    <span className="font-bold text-sm">{counts}</span>
+                    <span className="font-bold text-sm">{counts || 0}</span>
                   )}
                 </span>
               </div>
