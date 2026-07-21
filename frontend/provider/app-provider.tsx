@@ -13,7 +13,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         <WalletProvider>
-          <SocketProvider>{children}</SocketProvider>
+        {children}
         </WalletProvider>
       </QueryClientProvider>
     </WagmiProvider>
