@@ -5,7 +5,11 @@ import { startIndexer } from "./listeners/listeners";
 import { subscribeRouter, offerRouter, tokenIdsRouter } from "./routes";
 
 export const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: ["https://nascosto.vercel.app"]
+}));
+
 const PORT = process.env.PORT || 3001
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
