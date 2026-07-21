@@ -132,9 +132,6 @@ export function Navbar() {
   const signer = useEthersSigner();
   const { isOwner } = useIsContractOwner(address, signer);
 
-  useEffect(() => {
-    console.log("is owner:", isOwner);
-  }, [isOwner, address]);
   const isLandingPage = pathname === "/";
   const baseLinks = isLandingPage ? LANDING_LINKS : APP_LINKS;
 

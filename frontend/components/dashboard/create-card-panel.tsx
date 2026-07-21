@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import { Button } from "@/components/button";
 import { toPreviewSrc } from "@/helpers/preview";
 import { CardForm, SPORTS, RARITIES } from "@/types/card";
 import { CardImageCropper } from "../card-image-cropper";
