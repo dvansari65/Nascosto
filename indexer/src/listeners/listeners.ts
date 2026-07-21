@@ -7,9 +7,7 @@ import {
 } from "../contracts";
 import { fetchPinataMetadata, toPreviewSrc } from "../helpers/preview";
 
-export async function startIndexer(io: any) {
-  console.log("Starting Indexer & WebSocket server...");
-
+export async function startIndexer() {
   const provider = getPublicProvider();
 
   // We need an ethers instance to listen to events
@@ -43,7 +41,6 @@ export async function startIndexer(io: any) {
             status: "Listed",
           },
         });
-        io.emit("CardListed", listing);
       } catch (e) {
         console.error("Error processing CardListed:", e);
       }
@@ -60,8 +57,6 @@ export async function startIndexer(io: any) {
         where: { tokenId: tId },
         data: { status: "Delisted" },
       });
-
-      io.emit("CardDelisted", listing);
     } catch (e) {
       console.error("Error processing CardDelisted:", e);
     }
@@ -102,8 +97,6 @@ export async function startIndexer(io: any) {
             encryptedForSeller: "",
           },
         });
-
-        io.emit("OfferSubmitted", offer);
       } catch (e) {
         console.error("Error processing OfferSubmitted:", e);
       }
@@ -130,8 +123,6 @@ export async function startIndexer(io: any) {
           },
           data: { status: "Accepted" },
         });
-
-        io.emit("OfferAccepted", { listing, offer });
       } catch (e) {
         console.error("Error processing OfferAccepted:", e);
       }
@@ -180,8 +171,6 @@ export async function startIndexer(io: any) {
               ?.value || null,
         },
       });
-      io.emit("CardMinted", card);
-      console.log(`Card ${tId} synced from Pinata.`);
     } catch (e: any) {
       // P2002 = Prisma unique constraint violation. Not expected from your
       // contract logic (tokenId can't mint twice), but ethers WebSocket
@@ -193,7 +182,6 @@ export async function startIndexer(io: any) {
         );
         return;
       }
-      console.error("Error processing CardMinted:", e);
     }
   });
 
