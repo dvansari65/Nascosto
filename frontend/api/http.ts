@@ -18,7 +18,6 @@ export const getMyOffers = (publicKey: string | undefined) => {
         const result = await fetch(
           `${BACKEND_URL}/api/offers/${publicKey.toString()}`,
         );
-        console.log("result:", result);
         const data = await result.json();
         if (!result.ok) {
           toast.error(data.message || "Failed to fetch offers!");
@@ -30,7 +29,6 @@ export const getMyOffers = (publicKey: string | undefined) => {
         throw error;
       }
     },
-    enabled: !!publicKey,
   });
 };
 
