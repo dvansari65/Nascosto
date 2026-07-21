@@ -2,7 +2,8 @@ import { useEthersSigner } from "@/hooks/useEtherSigner";
 import { useWallet } from "@/provider/WalletContext";
 import { MarketplaceService } from "@/services/marketplace.service";
 import { useMutation } from "@tanstack/react-query";
-import { encryptPriceForSeller } from "./http";
+import { savePriceForSeller } from "./http";
+import { toast } from "sonner";
 
 export interface SubmitOfferInputs {
   amount: string;
@@ -39,10 +40,10 @@ export const submitOffer = () => {
         await MarketplaceService.submitOffer(
           signer,
           activeOfferTokenId,
-          sellerKey,
+          amount,
         );
-
-        await encryptPriceForSeller({
+        toast.success("Offer submitted!");
+        await savePriceForSeller({
           encryptedPrice: amount.toString(),
           tokenId: Number(activeOfferTokenId),
           buyer: address,

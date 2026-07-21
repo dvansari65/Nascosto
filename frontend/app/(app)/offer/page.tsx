@@ -1,17 +1,16 @@
 "use client";
 
-import { getMyOffers } from "@/api/http";
+import { getMyOffers, useAcceptOffer } from "@/api/http";
 import { DotsLoader } from "@/components/loaders/dots-loader";
 import OfferPriceModal from "@/components/modal/price";
 import { SimpleButton } from "@/components/simple-button";
-import { useSocket } from "@/provider/socket-provider";
 import { useWallet } from "@/provider/WalletContext";
 import { Copy } from "lucide-react";
 import { useState } from "react";
-
+import { useEthersSigner } from "@/hooks/useEtherSigner";
+import { toast } from "sonner";
 export default function OfferPage() {
   const { address } = useWallet();
-  const socket = useSocket();
   const {
     data: offers,
     isPending,
@@ -22,6 +21,21 @@ export default function OfferPage() {
     isOpen: false,
     price: "",
   });
+
+  const signer = useEthersSigner();
+  const {
+    mutate: acceptOffer,
+    isPending: isAccepting,
+    variables,
+  } = useAcceptOffer();
+
+  const handleAcceptClick = (tokenId: number, buyer: string) => {
+    if (!signer) {
+      toast.error("Wallet not connected");
+      return;
+    }
+    acceptOffer({ signer, tokenId, buyer });
+  };
 
   const statusColors = (status: string | null) => {
     if (!status) {
@@ -38,7 +52,7 @@ export default function OfferPage() {
     }
   };
 
-  if (!isPending && (offers?.length == 0 || !socket)) {
+  if (!isPending && offers?.length == 0) {
     return (
       <div className="w-full h-screen flex justify-center items-center text-3xl">
         Oops! There's no offers!
@@ -91,7 +105,7 @@ export default function OfferPage() {
             <div className="flex items-center gap-1">
               <span className="text-sm font-bold shrink-0">Buyer:</span>
               <button
-                onClick={() => navigator.clipboard.writeText(offer.buyer)}
+                onClick={() => navigator.clipboard.writeText(offer?.buyer)}
                 className="flex items-center gap-1 truncate rounded bg-neutral-100 px-1.5 py-0.5 text-xs hover:bg-neutral-200"
               >
                 <span className="truncate">{`${offer.buyer.slice(0, 6)}...${offer.buyer.slice(-4)}`}</span>
@@ -114,9 +128,29 @@ export default function OfferPage() {
               <span className="text-sm font-bold shrink-0">Name:</span>
               <span>{offer.card?.name || ""}</span>
             </div>
-            <div className="w-full flex justify-center items-center">
-              <SimpleButton className="bg-slate-900 text-white hover:cursor-pointer">
-                Accept Offer
+            <div className="w-full flex flex-col gap-2 mt-2">
+              <SimpleButton
+                isLoading={
+                  isAccepting &&
+                  variables?.tokenId === offer.tokenId &&
+                  variables?.buyer === offer.buyer
+                }
+                disabled={
+                  (isAccepting &&
+                    variables?.tokenId === offer.tokenId &&
+                    variables?.buyer === offer.buyer) ||
+                  offer.status !== "Pending"
+                }
+                onClick={() => handleAcceptClick(offer.tokenId, offer.buyer)}
+                className="w-full justify-center bg-slate-900 text-white hover:bg-slate-800 text-sm py-2"
+              >
+                {isAccepting &&
+                variables?.tokenId === offer.tokenId &&
+                variables?.buyer === offer.buyer
+                  ? "Accepting..."
+                  : offer.status === "Pending"
+                    ? "Accept Offer"
+                    : "Offer Processed"}
               </SimpleButton>
               <SimpleButton
                 onClick={() =>
@@ -125,7 +159,7 @@ export default function OfferPage() {
                     price: offer.encryptedForSeller,
                   })
                 }
-                className="bg-slate-900 text-white hover:cursor-pointer"
+                className="w-full justify-center bg-neutral-100 text-slate-900 hover:bg-neutral-200 text-sm py-2"
               >
                 Decrypt Offer Price
               </SimpleButton>
