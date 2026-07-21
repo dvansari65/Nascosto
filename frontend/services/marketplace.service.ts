@@ -1,7 +1,10 @@
 import { ethers } from "ethers";
-import { getMarketplaceContract, CONTRACT_ADDRESSES } from "@/lib/contracts";
+import {
+  getMarketplaceContract,
+  getMintToken,
+  CONTRACT_ADDRESSES,
+} from "@/lib/contracts";
 import { encryptAmount } from "@/encryption/eerc";
-import { encryptWithPublicKey } from "@/encryption/encryptWithPublicKey";
 
 export interface Listing {
   tokenId: bigint;
@@ -42,6 +45,15 @@ export class MarketplaceService {
   ) {
     // 1. Client-side encryption
     const amountInWei = ethers.parseEther(amount);
+    const buyer = await signer.getAddress();
+    const paymentToken = getMintToken(signer);
+    const balance = await paymentToken.balanceOf(buyer);
+    if (balance < amountInWei) {
+      throw new Error(
+        `Insufficient NAS balance. You need ${amount} NAS to submit this offer.`,
+      );
+    }
+
     const encryptedOfferHandle = await encryptAmount(amountInWei, signer);
     // 2. Submit offer transaction
     const contract = getMarketplaceContract(signer);
@@ -87,7 +99,7 @@ export class MarketplaceService {
 
   /**
    * Accepts an offer for a listed card, triggering the atomic settlement.
-   * Requires a zk-SNARK proof of the seller's decryption matching the buyer's offer.
+   * TODO: Requires a zk-SNARK proof of the seller's decryption matching the buyer's offer.
    */
   static async acceptOffer(
     signer: ethers.Signer,
