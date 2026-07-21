@@ -7,6 +7,7 @@
     "test": "hardhat test",
     "deploy:fuji": "hardhat run scripts/deploy.ts --network fuji",
     "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
+    "airdrop:nas": "hardhat run scripts/airdropNas.ts --network fuji",
     "verify": "hardhat verify --network fuji",
     "clean": "hardhat clean",
     "typechain": "hardhat typechain"
