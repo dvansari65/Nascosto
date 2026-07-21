@@ -2,9 +2,10 @@ import { Offer } from "@/types/offer";
 import { TokenData } from "@/types/token";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { MarketplaceService } from "@/services/marketplace.service";
+import { ethers } from "ethers";
 
-const BACKEND_URL =
-  process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
 export const getMyOffers = (publicKey: string | undefined) => {
   return useQuery({
@@ -29,6 +30,7 @@ export const getMyOffers = (publicKey: string | undefined) => {
         throw error;
       }
     },
+    enabled: !!publicKey,
   });
 };
 
@@ -39,8 +41,15 @@ export const useSubscribe = () => {
         if (!email) {
           throw new Error("Email not found!");
         }
+        if (!BACKEND_URL) {
+          return;
+        }
+        console;
         const result = await fetch(
-          `${BACKEND_URL}/api/subcribe/${email.toString()}`,
+          `${BACKEND_URL}/api/subscribe/${email.toString()}`,
+          {
+            method: "POST",
+          },
         );
         const data = await result.json();
         if (!result.ok) {
@@ -74,6 +83,7 @@ export const getMyTokens = (publicKey: string | undefined) => {
         throw error;
       }
     },
+    enabled: !!publicKey,
   });
 };
 
@@ -103,22 +113,22 @@ interface EncryptPriceForSellerInputs {
   buyer: string;
 }
 
-export const encryptPriceForSeller = async ({
+export const savePriceForSeller = async ({
   encryptedPrice,
   tokenId,
   buyer,
 }: EncryptPriceForSellerInputs) => {
   try {
-    if (!encryptPriceForSeller) {
+    if (!encryptedPrice) {
       throw new Error("Please provide encrypted price!");
     }
-    const result = await fetch(`${BACKEND_URL}/api/offer/encrypt`, {
+    const result = await fetch(`${BACKEND_URL}/api/offers/encrypt`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        encryptPriceForSeller,
+        encryptedPrice,
         tokenId,
         buyer,
       }),
@@ -131,4 +141,34 @@ export const encryptPriceForSeller = async ({
   } catch (error) {
     throw error;
   }
+};
+
+interface AcceptOfferInputs {
+  signer: ethers.Signer;
+  tokenId: string | number;
+  buyer: string;
+}
+
+export const useAcceptOffer = () => {
+  return useMutation({
+    mutationFn: async ({ signer, tokenId, buyer }: AcceptOfferInputs) => {
+      if (!signer) throw new Error("Wallet not connected");
+      await MarketplaceService.acceptOffer(
+        signer,
+        BigInt(tokenId),
+        buyer,
+        "0x",
+      );
+      return true;
+    },
+    onSuccess: () => {
+      toast.success(
+        "Offer accepted successfully! Transaction is being processed on-chain.",
+      );
+    },
+    onError: (error: any) => {
+      console.error("Accept error:", error);
+      toast.error(error.message || "Failed to accept offer");
+    },
+  });
 };

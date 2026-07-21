@@ -1,29 +1,14 @@
+"use client";
 // hooks/useEthersSigner.ts
-import { useEffect, useState } from "react";
-import { ethers } from "ethers";
-import { useAccount } from "wagmi";
 import { useWallet } from "@/provider/WalletContext";
+import { useMemo } from "react";
 
 export function useEthersSigner() {
-  const { status } = useAccount(); // "connecting" | "reconnecting" | "connected" | "disconnected"
-  const { address, getEthersSigner } = useWallet();
-  const [signer, setSigner] = useState<ethers.Signer | null>(null);
+  const { signer } = useWallet();
 
-  useEffect(() => {
-    if (status !== "connected" || !address) {
-      setSigner(null);
-      return;
-    }
+  const updatedSigner = useMemo(() => {
+    return signer;
+  }, [signer]);
 
-    let cancelled = false;
-    getEthersSigner().then((s) => {
-      if (!cancelled) setSigner(s);
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [status, address, getEthersSigner]);
-
-  return signer;
+  return updatedSigner;
 }

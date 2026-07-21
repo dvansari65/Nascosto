@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useMemo, ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  ReactNode,
+} from "react";
 import { useAccount, useConnect, useDisconnect, useWalletClient } from "wagmi";
 import { getWalletClient } from "@wagmi/core";
 import { BrowserProvider, JsonRpcSigner } from "ethers";
@@ -10,6 +16,7 @@ import { wagmiConfig } from "@/lib/wagmi";
 interface WalletContextType {
   address: `0x${string}` | undefined;
   isConnected: boolean;
+  signer: JsonRpcSigner | null;
   getEthersSigner: () => Promise<JsonRpcSigner | null>;
   connectWallet: () => void;
   disconnectWallet: () => void;
@@ -36,13 +43,31 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
 
-  const getEthersSigner = async () => {
-    const walletClient = await getWalletClient(wagmiConfig);
-    if (!walletClient) return null;
-    return clientToSigner(walletClient);
-  };
+  const { data: walletClient } = useWalletClient();
 
-  const connectWallet = () => {
+  const signer = useMemo(
+    () => (walletClient ? clientToSigner(walletClient) : null),
+    [walletClient],
+  );
+
+  const getEthersSigner = useCallback(async () => {
+    if (signer) {
+      return signer;
+    }
+    if (!isConnected) {
+      return null;
+    }
+
+    try {
+      const client = await getWalletClient(wagmiConfig);
+      return client ? clientToSigner(client) : null;
+    } catch (error) {
+      console.error("Failed to get wallet signer:", error);
+      return null;
+    }
+  }, [isConnected, signer]);
+
+  const connectWallet = useCallback(() => {
     const injectedConnector = connectors.find((c) => c.id === "injected");
     if (!injectedConnector) {
       alert(
@@ -51,19 +76,27 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       return;
     }
     connect({ connector: injectedConnector });
-  };
+  }, [connect, connectors]);
 
-  const disconnectWallet = () => disconnect();
+  const disconnectWallet = useCallback(() => disconnect(), [disconnect]);
 
   const value = useMemo(
     () => ({
       address,
       isConnected,
+      signer,
       getEthersSigner,
       connectWallet,
       disconnectWallet,
     }),
-    [address, isConnected],
+    [
+      address,
+      isConnected,
+      signer,
+      getEthersSigner,
+      connectWallet,
+      disconnectWallet,
+    ],
   );
 
   return (

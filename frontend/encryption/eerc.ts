@@ -13,6 +13,10 @@ export async function encryptAmount(
   amount: bigint | string,
   signer: ethers.Signer,
 ): Promise<string> {
+  if (process.env.NEXT_PUBLIC_USE_MOCK_EERC !== "false") {
+    return ethers.toBeHex(BigInt(amount), 32);
+  }
+
   try {
     // We attempt to use the official AvaCloud eERC SDK imported from package.json
     // @ts-expect-error - The eerc-sdk might not export full types locally
@@ -30,7 +34,6 @@ export async function encryptAmount(
       "AvaCloud eERC SDK not initialized. Using secure local mock for UI testing:",
       error,
     );
-    // Fallback for hackathon demo so the UI doesn't break if the SDK throws
-    return ethers.keccak256(ethers.toUtf8Bytes(amount.toString()));
+    return ethers.toBeHex(BigInt(amount), 32);
   }
 }
