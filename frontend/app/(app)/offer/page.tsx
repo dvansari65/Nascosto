@@ -16,6 +16,7 @@ export default function OfferPage() {
     isPending,
     isError,
     error,
+    isFetching,
   } = getMyOffers(address?.toString());
   const [isOfferPriceModalOpen, setIsOfferPriceModal] = useState({
     isOpen: false,
@@ -52,24 +53,33 @@ export default function OfferPage() {
     }
   };
 
-  if (!isPending && offers?.length == 0) {
+  if (!address) {
     return (
       <div className="w-full h-screen flex justify-center items-center text-3xl">
-        Oops! There's no offers!
+        Connect your wallet to view offers
       </div>
     );
   }
-  if (isPending) {
+
+  if (isPending && isFetching) {
     return (
-      <div className="relative overflow-hidden w-full h-screen  flex justify-center">
+      <div className="relative overflow-hidden w-full h-screen flex justify-center">
         <DotsLoader className="absolute top-[40%] left-[45%]" />
       </div>
     );
   }
+
   if (isError) {
     return (
       <div className="w-full h-screen flex justify-center items-center text-3xl">
         {error.message || "Failed to fetch Offers!"}
+      </div>
+    );
+  }
+  if (!offers || offers.length === 0) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center text-3xl">
+        Oops! There's no offers!
       </div>
     );
   }
