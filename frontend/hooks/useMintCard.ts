@@ -68,7 +68,7 @@ export function useMintCard({ getEthersSigner, address }: MintDeps) {
           metadataUpload.ipfsUri,
           hash,
         );
-
+        toast.dismiss(toastId)
         if (!tokenId) {
           throw new Error("Token= id not found!");
         }
